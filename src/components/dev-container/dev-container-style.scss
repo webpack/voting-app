@@ -1,0 +1,8 @@
+@import 'vars';
+
+.dev-container {
+    max-width: map-get($screens, large);
+    margin: 0 auto;
+    font-family: 'Helvetica', sans-serif;
+    color: #343434;
+}
