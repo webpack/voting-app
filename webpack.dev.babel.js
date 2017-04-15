@@ -24,6 +24,7 @@ export default env => Merge(CommonConfig(env), {
     ],
 
     devServer: {
+        hot: true,
         port: 3030,
         inline: true,
         compress: true,
