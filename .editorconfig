@@ -1,0 +1,13 @@
+# Top-most EditorConfig file
+root = true
+
+# 4 space indentation
+[*.{js,jsx,scss}]
+charset = utf-8
+indent_style = space
+indent_size = 4
+
+# Format Config
+[{package.json,.editorconfig,.babelrc,.eslintrc}]
+indent_style = space
+indent_size = 2
