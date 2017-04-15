@@ -14,7 +14,7 @@ export default env => Merge(CommonConfig(env), {
             inject: false,
             template: HTMLTemplate,
 
-            title: 'Webpack | Vote (Development Mode)',
+            title: 'webpack | vote (dev-mode)',
             appMountId: 'root',
             mobile: true,
             favicon: './favicon.ico'
