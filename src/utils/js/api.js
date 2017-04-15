@@ -7,17 +7,17 @@ import {
     createItem as devCreateItem,
     vote as devVote,
     configItem as devConfigItem
-} from "./api.dev";
+} from './api.dev';
 
-const API_URL = "https://oswils44oj.execute-api.us-east-1.amazonaws.com/production/";
-const GITHUB_CLIENT_ID = "4d355e2799cb8926c665";
-const PRODUCTION_HOST = "webpack.js.org";
+const API_URL = 'https://oswils44oj.execute-api.us-east-1.amazonaws.com/production/';
+const GITHUB_CLIENT_ID = '4d355e2799cb8926c665';
+const PRODUCTION_HOST = 'webpack.js.org';
 
 // You can test the production mode with a host entry,
 // or by setting PRODUCTION_HOST to "localhost:3000" and stealing localStorage.voteAppToken from the production side.
 
 function checkResult(result) {
-  if ( !result ) throw new Error("No result received");
+  if ( !result ) throw new Error('No result received');
   if ( result.errorMessage ) throw new Error(result.errorMessage);
 
   return result;
@@ -31,14 +31,14 @@ export function isLoginActive() {
 }
 
 export function startLogin(callbackUrl) {
-    let state = "" + Math.random();
+    let state = '' + Math.random();
 
     if (window.location.host !== PRODUCTION_HOST) {
         return devStartLogin(callbackUrl);
     }
 
     window.localStorage.githubState = state;
-    window.location = "https://github.com/login/oauth/authorize?client_id=" + GITHUB_CLIENT_ID + "&scope=user:email&state=" + state + "&allow_signup=false&redirect_uri=" + encodeURIComponent(callbackUrl);
+    window.location = 'https://github.com/login/oauth/authorize?client_id=' + GITHUB_CLIENT_ID + '&scope=user:email&state=' + state + '&allow_signup=false&redirect_uri=' + encodeURIComponent(callbackUrl);
 
     return Promise.resolve();
 }
@@ -65,16 +65,16 @@ export function continueLogin() {
 
 function login(code, state) {
     if ( state !== window.localStorage.githubState ) {
-        return Promise.reject(new Error("Request state doesn't match (Login was triggered by 3rd party)"));
+        return Promise.reject(new Error('Request state doesn\'t match (Login was triggered by 3rd party)'));
 
     } else {
         delete window.localStorage.githubState;
 
-        return fetch(API_URL + "/login", {
+        return fetch(API_URL + '/login', {
                 headers: {
-                    "Content-Type": "application/json"
+                    'Content-Type': 'application/json'
                 },
-                method: "POST",
+                method: 'POST',
                 body: JSON.stringify({
                     code,
                     state
@@ -82,7 +82,7 @@ function login(code, state) {
             })
             .then((res) => res.json())
             .then(checkResult).then(result => {
-                if (!result.token) throw new Error("No token received from API");
+                if (!result.token) throw new Error('No token received from API');
 
                 return result.token;
             });
@@ -95,7 +95,7 @@ export function getSelf(token) {
 
     } else {
         return fetch(`${API_URL}/self?token=${token}`, {
-                mode: "cors"
+                mode: 'cors'
             })
             .then((res) => res.json())
             .then(checkResult);
@@ -121,9 +121,9 @@ export function createItem(token, list, title, description) {
 
     } else {
         return fetch(`${API_URL}/list/${list}?token=${token}`, {
-                method: "POST",
+                method: 'POST',
                 headers: {
-                    "Content-Type": "application/json"
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     title,
@@ -141,9 +141,9 @@ export function vote(token, itemId, voteName, value) {
 
     } else {
         return fetch(`${API_URL}/vote/${itemId}/${voteName}?token=${token}`, {
-                method: "POST",
+                method: 'POST',
                 headers: {
-                    "Content-Type": "application/json"
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     count: value
@@ -161,9 +161,9 @@ export function configItem(token, itemId, config) {
 
     } else {
         return fetch(`${API_URL}/config/${itemId}?token=${token}`, {
-                method: "POST",
+                method: 'POST',
                 headers: {
-                    "Content-Type": "application/json"
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     config: config

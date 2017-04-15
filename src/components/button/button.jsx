@@ -12,18 +12,18 @@ export default class NewButton extends React.Component {
     n = Math.min(maxUp, Math.max(n, -maxDown));
 
     if (n === 0) {
-      return "";
+      return '';
 
     } else if (n > 0) {
-      return "+" + n;
+      return '+' + n;
 
-    } else return "" + n;
+    } else return '' + n;
   }
 
   makeTriangle(n, fn, size, minForEnabled, increase) {
     const { maxUp, maxDown, color } = this.props;
     const enabled = n !== 0 && (n > 0 ? (maxUp >= minForEnabled) : (maxDown >= minForEnabled));
-    const className = "vote-new-button__upDown";
+    const className = 'vote-new-button__upDown';
 
     if (enabled) {
       return (
@@ -44,7 +44,7 @@ export default class NewButton extends React.Component {
     } else {
       return (
         <span className={ className } >
-          {fn({size: size, color: "#eee"})}
+          {fn({size: size, color: '#eee'})}
         </span>
       );
     }
@@ -110,10 +110,10 @@ export default class NewButton extends React.Component {
             { this.makeTriangle(1, triangleUp, 10, 1, true) }
             { this.makeTriangle(-1, triangleDown, 10, 1, false) }
           </div>
-          <div className="vote-new-button__value" title={value + " was voted in total by all users."}>
+          <div className="vote-new-button__value" title={value + ' was voted in total by all users.'}>
             <span className={className}>{value}</span>
           </div>
-          <div className="vote-new-button__my-value" title={myValue + " was voted by you."}>
+          <div className="vote-new-button__my-value" title={myValue + ' was voted by you.'}>
             (<span className={className}>{myValue}</span>)
           </div>
         </div>
@@ -122,7 +122,7 @@ export default class NewButton extends React.Component {
     } else {
       return (
         <div className="vote-new-button" style={{color: color}}>
-          <div className="vote-new-button__logout-value" title={value + " was voted in total by all users."}>
+          <div className="vote-new-button__logout-value" title={value + ' was voted in total by all users.'}>
             <span className={className}>{value}</span>
           </div>
         </div>

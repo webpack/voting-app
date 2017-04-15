@@ -12,31 +12,31 @@ let lists = {
     todo: {
         possibleVotes: [
             {
-                name: "influence",
-                currency: "influence",
+                name: 'influence',
+                currency: 'influence',
                 score: 1,
-                color: "blue"
+                color: 'blue'
             },
             {
-                name: "golden",
-                currency: "goldenInfluence",
+                name: 'golden',
+                currency: 'goldenInfluence',
                 score: 1,
-                color: "#bfa203"
+                color: '#bfa203'
             }
         ],
         items: [
             { 
-                id: "1234", 
-                list: "todo", 
-                title: "Finish up MVP documentation", 
-                description: "Take care for the remaining issues in the webpack.js.org repo which are relevant for the MVP.", 
+                id: '1234', 
+                list: 'todo', 
+                title: 'Finish up MVP documentation', 
+                description: 'Take care for the remaining issues in the webpack.js.org repo which are relevant for the MVP.', 
                 influence: 15 
             },
             { 
-                id: "2345", 
-                list: "todo", 
-                title: "Review whole documentation", 
-                description: "Read over **all** of the documentation to find errors.", 
+                id: '2345', 
+                list: 'todo', 
+                title: 'Review whole documentation', 
+                description: 'Read over **all** of the documentation to find errors.', 
                 golden: 20 
             }
         ]
@@ -44,8 +44,8 @@ let lists = {
 };
 
 let allItems = {
-    "1234": lists.todo.items[0],
-    "2345": lists.todo.items[1],
+    '1234': lists.todo.items[0],
+    '2345': lists.todo.items[1],
 };
 
 function delay(time) {
@@ -65,7 +65,7 @@ export function isLoginActive() {
 }
 
 export function startLogin(callbackUrl) {
-    window.location.search = "?login=" + encodeURIComponent(callbackUrl);
+    window.location.search = '?login=' + encodeURIComponent(callbackUrl);
     return Promise.resolve();
 }
 
@@ -73,7 +73,7 @@ export function continueLogin() {
     if ( /^\?login=/.test(window.location.search) ) {
         return delay(2000).then(() => {
             setTimeout(() => window.location = decodeURIComponent(window.location.search.substr(7), 100));
-            return "developer";
+            return 'developer';
         });
     }
 
@@ -81,27 +81,27 @@ export function continueLogin() {
 }
 
 export function getSelf(token) {
-    if (token !== "developer") {
-        return Promise.reject(new Error("Not logged in as developer"));
+    if (token !== 'developer') {
+        return Promise.reject(new Error('Not logged in as developer'));
 
     } else {
         return delay(500).then(() => ({
-            login: "dev",
-            name: "Developer",
-            avatar: "https://github.com/webpack.png",
+            login: 'dev',
+            name: 'Developer',
+            avatar: 'https://github.com/webpack.png',
             currencies: [
                 { 
-                    name: "influence", 
-                    displayName: "Influence", 
-                    description: "Some **description**", 
+                    name: 'influence', 
+                    displayName: 'Influence', 
+                    description: 'Some **description**', 
                     value: totalCurrencies.influence, 
                     used: usedCurrencies.influence, 
                     remaining: totalCurrencies.influence - usedCurrencies.influence 
                 },
                 { 
-                    name: "goldenInfluence", 
-                    displayName: "Golden Influence", 
-                    description: "Some **description**", 
+                    name: 'goldenInfluence', 
+                    displayName: 'Golden Influence', 
+                    description: 'Some **description**', 
                     value: totalCurrencies.goldenInfluence, 
                     used: usedCurrencies.goldenInfluence, 
                     remaining: totalCurrencies.goldenInfluence - usedCurrencies.goldenInfluence 
@@ -112,13 +112,13 @@ export function getSelf(token) {
 }
 
 export function getList(token, name) {
-    const loggedIn = token === "developer";
+    const loggedIn = token === 'developer';
     const listData = lists[name];
 
     return delay(500).then(() => ({
         name: name,
-        displayName: "DEV: " + name,
-        description: "Some **description**",
+        displayName: 'DEV: ' + name,
+        description: 'Some **description**',
         lockable: true,
         deletable: true,
         archivable: true,
@@ -151,12 +151,12 @@ export function getList(token, name) {
 }
 
 export function createItem(token, list, title, description) {
-    if (token !== "developer") {
-        return Promise.reject(new Error("Not logged in as developer"));
+    if (token !== 'developer') {
+        return Promise.reject(new Error('Not logged in as developer'));
 
     } else {
         let newItem = {
-            id: Math.random() + "",
+            id: Math.random() + '',
             list,
             title,
             description
@@ -181,9 +181,9 @@ export function createItem(token, list, title, description) {
 }
 
 export function vote(token, itemId, voteName, value) {
-    if (token !== "developer") {
+    if (token !== 'developer') {
         return Promise.reject(
-            new Error("Not logged in as developer")
+            new Error('Not logged in as developer')
         );
 
     } else {
@@ -204,9 +204,9 @@ export function vote(token, itemId, voteName, value) {
 export function configItem(token, itemId, config) {
     var item = allItems[itemId];
 
-    if (token !== "developer") {
+    if (token !== 'developer') {
         return Promise.reject(
-            new Error("Not logged in as developer")
+            new Error('Not logged in as developer')
         );
 
     } else {

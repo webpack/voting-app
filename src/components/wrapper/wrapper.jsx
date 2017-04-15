@@ -1,5 +1,5 @@
 import React from 'react';
-import * as api from "Utils/js/api";
+import * as api from 'Utils/js/api';
 import VoteButton from 'Components/button/button';
 import Influence from 'Components/influence/influence';
 import GithubMark from './github-logo.svg';
@@ -110,13 +110,13 @@ export default class Wrapper extends React.Component {
             isVoting: this.state.isVoting + 1,
             listInfo: listInfo && {
                 ...listInfo,
-                items: updateByProperty(listInfo.items, "id", itemId, item => ({
+                items: updateByProperty(listInfo.items, 'id', itemId, item => ({
                     ...item,
-                    votes: updateByProperty(item.votes, "name", voteName, vote => ({
+                    votes: updateByProperty(item.votes, 'name', voteName, vote => ({
                         ...vote,
                         votes: vote.votes + diffValue
                     })),
-                    userVotes: updateByProperty(item.userVotes, "name", voteName, vote => ({
+                    userVotes: updateByProperty(item.userVotes, 'name', voteName, vote => ({
                         ...vote,
                         votes: vote.votes + diffValue
                     })),
@@ -125,7 +125,7 @@ export default class Wrapper extends React.Component {
             },
             selfInfo: selfInfo && {
                 ...selfInfo,
-                currencies: updateByProperty(selfInfo.currencies, "name", currencyName, currency => ({
+                currencies: updateByProperty(selfInfo.currencies, 'name', currencyName, currency => ({
                     ...currency,
                     used: currency.used + diffValue,
                     remaining: currency.remaining - diffValue
@@ -237,15 +237,15 @@ export default class Wrapper extends React.Component {
                                                 if (currencyInfo && currencyInfo.remaining + value < maximum) maximum = currencyInfo.remaining + value;
 
                                                 return (
-                                                    <div key={voteSettings.name} className="vote-app__item-button">
+                                                    <div key={ voteSettings.name } className="vote-app__item-button">
                                                         <VoteButton
-                                                            className={"vote-app__vote-" + voteSettings.name}
-                                                            value={vote.votes}
-                                                            myValue={value}
-                                                            maxUp={userVote ? maximum - value : 0}
-                                                            maxDown={userVote ? value - minimum : 0}
-                                                            color={this.getColor(voteSettings.name)}
-                                                            canVote = {!!voteAppToken && !item.locked}
+                                                            className={ 'vote-app__vote-' + voteSettings.name }
+                                                            value={ vote.votes }
+                                                            myValue={ value }
+                                                            maxUp={ userVote ? maximum - value : 0 }
+                                                            maxDown={ userVote ? value - minimum : 0 }
+                                                            color={ this.getColor(voteSettings.name) }
+                                                            canVote = { !!voteAppToken && !item.locked }
                                                             onVote={(diffValue) => {
                                                                 this.vote(item.id, voteSettings.name, diffValue, voteSettings.currency, voteSettings.score);
                                                             }} />
@@ -411,8 +411,8 @@ export default class Wrapper extends React.Component {
                                                 api.createItem(voteAppToken, name, newTitle, newDescription)
                                                     .then(item => {
                                                         this.setState({
-                                                            newTitle: "",
-                                                            newDescription: "",
+                                                            newTitle: '',
+                                                            newDescription: '',
                                                             isCreating: false,
                                                             listInfo: listInfo && {
                                                                 ...listInfo,
@@ -448,7 +448,7 @@ export default class Wrapper extends React.Component {
             return (
                 <div className="vote-app__login-button">
                     <button onClick={() => {
-                        api.startLogin(window.location + "");
+                        api.startLogin(window.location + '');
                     }}>
                         Login with Github&nbsp;
                         <img src={ GithubMark } />
@@ -472,7 +472,7 @@ export default class Wrapper extends React.Component {
                                     .map(currency => (
                                         <li 
                                             key={ currency.name } 
-                                            className={ "vote-app__currency-" + currency.name } 
+                                            className={ 'vote-app__currency-' + currency.name } 
                                             title={`${currency.description}\nYou used ${currency.used} of a total of ${currency.value} ${currency.displayName}.`}>
                                             { currency.remaining } { currency.displayName }
                                         </li>
@@ -524,9 +524,9 @@ export default class Wrapper extends React.Component {
 
     getColor(name) {
         switch (name) {
-            case "influence": return "blue";
-            case "golden": return "#bfa203";
-            case "thumb": return "#535353";
+            case 'influence': return 'blue';
+            case 'golden': return '#bfa203';
+            case 'thumb': return '#535353';
             default: return undefined;
         }
     }

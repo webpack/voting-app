@@ -2,7 +2,7 @@ import React from 'react';
 import './influence-style';
 
 export default props => {
-    return props.type === "normal" ? (
+    return props.type === 'normal' ? (
         <section className="influence-info influence-info__section">
             <h1 className="influence-info__header">Influence</h1>
             <p><em>Influence</em> is a unit of measure based on time you have been a member on GitHub. However, in 2017 and on you will recieve one influence per day.</p>
