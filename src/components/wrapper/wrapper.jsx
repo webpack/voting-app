@@ -5,8 +5,6 @@ import Influence from 'Components/influence/influence';
 import GithubMark from './github-logo.svg';
 import './wrapper-style';
 
-// import 'whatwg-fetch';
-
 function updateByProperty(array, property, propertyValue, update) {
     return array.map(item => {
         if (item[property] === propertyValue) {
