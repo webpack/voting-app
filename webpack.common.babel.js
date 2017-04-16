@@ -71,6 +71,10 @@ export default (env = {}) => ({
         new ExtractTextPlugin({
             disable: !!env.dev,
             filename: 'style.min.css'
+        }),
+
+        new Webpack.ProvidePlugin({
+            fetch: 'whatwg-fetch'
         })
     ],
 
