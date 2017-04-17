@@ -84,6 +84,11 @@ export default class Wrapper extends React.Component {
         }
     }
 
+    /**
+     * Fetch the list of voting topics
+     * 
+     * @param  {object} props - The props to use
+     */
     updateList(props = this.props) {
         let { name } = props,
             { voteAppToken } = localStorage;
@@ -301,7 +306,7 @@ export default class Wrapper extends React.Component {
                                                                 editItemTitle: item.title,
                                                                 editItemDescription: item.description
                                                             });
-                                                            }}>
+                                                        }}>
                                                             Edit
                                                         </button>
                                                     </div> 
@@ -403,7 +408,7 @@ export default class Wrapper extends React.Component {
      * @param  {string} title       - The topic title
      * @param  {string} description - The topic description
      */
-    _createTopic(title, description) {
+    _createTopic(title = '', description = '') {
         let { name } = this.props,
             { listInfo } = this.state,
             { voteAppToken } = localStorage;
