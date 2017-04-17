@@ -266,71 +266,27 @@ export default class Wrapper extends React.Component {
 
                                                 { listInfo.isAdmin && (
                                                     <div>
-                                                        <button onClick={() => {
-                                                            this.setState({
-                                                                isCreating: true
-                                                            });
-
-                                                            api.configItem(voteAppToken, item.id, { locked: true })
-                                                                .then(() => {
-                                                                    this.setState({
-                                                                        isCreating: false
-                                                                    });
-
-                                                                    this.updateList();
-                                                                });
-                                                            }}>
+                                                        <button onClick={ 
+                                                            this._changeTopicSettings.bind(this, item.id, { locked: true }) 
+                                                        }>
                                                             Lock
                                                         </button>
 
-                                                        <button onClick={() => {
-                                                            this.setState({
-                                                                isCreating: true
-                                                            });
-
-                                                            api.configItem(voteAppToken, item.id, { locked: false })
-                                                                .then(() => {
-                                                                    this.setState({
-                                                                        isCreating: false
-                                                                    });
-
-                                                                    this.updateList();
-                                                                });
-                                                            }}>
+                                                        <button onClick={
+                                                            this._changeTopicSettings.bind(this, item.id, { locked: false })
+                                                        }>
                                                             Unlock
                                                         </button>
 
-                                                        <button onClick={() => {
-                                                            this.setState({
-                                                                isCreating: true
-                                                            });
-
-                                                            api.configItem(voteAppToken, item.id, { archived: true })
-                                                                .then(() => {
-                                                                    this.setState({
-                                                                        isCreating: false
-                                                                    });
-
-                                                                    this.updateList();
-                                                                });
-                                                            }}>
+                                                        <button onClick={
+                                                            this._changeTopicSettings.bind(this, item.id, { archived: true })
+                                                        }>
                                                             Archive
                                                         </button>
 
-                                                        <button onClick={() => {
-                                                            this.setState({
-                                                                isCreating: true
-                                                            });
-
-                                                            api.configItem(voteAppToken, item.id, { archived: false })
-                                                                .then(() => {
-                                                                    this.setState({
-                                                                        isCreating: false
-                                                                    });
-
-                                                                    this.updateList();
-                                                                });
-                                                            }}>
+                                                        <button onClick={
+                                                            this._changeTopicSettings.bind(this, item.id, { archived: false })
+                                                        }>
                                                             Unarchive
                                                         </button>
 
@@ -537,6 +493,29 @@ export default class Wrapper extends React.Component {
                         ]
                     }
                 });
+            });
+    }
+
+    /**
+     * Change a topics settings (e.g. archive status)
+     * 
+     * @param  {number} id      - The ID of the topic
+     * @param  {object} options - The new settings
+     */
+    _changeTopicSettings(id, options = {}) {
+        let { voteAppToken } = localStorage;
+
+        this.setState({
+            isCreating: true
+        });
+
+        api.configItem(voteAppToken, id, options)
+            .then(() => {
+                this.setState({
+                    isCreating: false
+                });
+
+                this.updateList();
             });
     }
 }
