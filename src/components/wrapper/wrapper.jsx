@@ -45,7 +45,7 @@ export default class Wrapper extends React.Component {
             });
 
         } else {
-            if (!selfInfo) this.updateSelf();
+            if (!selfInfo) this.updateUser();
             if (!listInfo) this.updateList();
         }
     }
@@ -56,7 +56,11 @@ export default class Wrapper extends React.Component {
         this.updateList(props);
     }
 
-    updateSelf() {
+    /**
+     * Fetch user information and available influence
+     * 
+     */
+    updateUser() {
         let { voteAppToken } = localStorage;
 
         if (voteAppToken) {
@@ -486,7 +490,7 @@ export default class Wrapper extends React.Component {
                         }}>Logout</button>
 
                         <button className="vote-app__update-button" disabled={inProgress} onClick={() => {
-                            this.updateSelf();
+                            this.updateUser();
                             this.updateList();
                         }}>Update</button>
                     </div>
