@@ -54,64 +54,6 @@
     }
   }
 
-  &__login-button {
-    margin: 20px 0;
-
-    button {
-      border: none;
-      outline: none;
-      color: getColor(white);
-      background: getColor(elephant);
-      padding: 5px 10px 5px 10px;
-      border-radius: 2px;
-      font-size: 13px;
-      cursor: pointer;
-
-      &:hover {
-        background: black;
-      }
-
-      &:active {
-        background: getColor(elephant)
-      }
-    }
-
-    img {
-      height: 25px;
-      vertical-align: middle;
-      padding-left: 5px;
-    }
-  }
-
-  &__userinfo {
-    outline: none;
-    border: none;
-    background: getColor(elephant);
-    color: white;
-    border-radius: 3px;
-    font-size: 13px;
-    display: inline-block;
-    padding: 3px 10px;
-
-    img {
-      height: 25px;
-      vertical-align: middle;
-      margin-right: 10px;
-    }
-  }
-
-  &__self-info {
-    margin-top: 10px;
-  }
-
-  &__button-area {
-    margin: 5px 0;
-  }
-
-  &__update-button {
-
-  }
-
   h1 {
     font-size: 16pt;
     font-weight: bold;
@@ -130,15 +72,6 @@
 
   &__item-edit-description {
     width: 100%;
-  }
-
-  &__currency-list {
-    display: block;
-
-    & > li {
-      display: inline-block;
-      padding: 5px;
-    }
   }
 
   &__item-card {
@@ -195,22 +128,26 @@
     }
   }
 
-  &__currency-influence, &__vote-influence {
+  // TODO: See note in account-style re shared styles
+
+  &__vote-influence {
     color: blue;
+
     &:before {
-      content: "◆\2009";
+        content: "◆\2009";
     }
   }
 
-  &__currency-goldenInfluence, &__vote-golden {
+  &__vote-golden {
     color: #bfa203;
     &:before {
       content: "◇\2009";
     }
   }
 
-  &__currency-support, &__vote-support {
+  &__vote-support {
     color: green;
+
     &:before {
       content: "$\2009";
     }

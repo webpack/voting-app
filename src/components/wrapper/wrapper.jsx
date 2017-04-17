@@ -2,8 +2,8 @@ import React from 'react';
 import * as api from 'Utils/js/api';
 import VoteButton from 'Components/button/button';
 import Influence from 'Components/influence/influence';
+import Account from 'Components/account/account';
 import CreateTopic from 'Components/create-topic/create-topic';
-import GithubMark from './github-logo.svg';
 import './wrapper-style';
 
 // Specify BEM block name
@@ -209,7 +209,11 @@ export default class Wrapper extends React.Component {
                         </div>
 
                         <div className={ `${block}__user-section` }>
-                            { this.renderSelf(inProgress) }
+                            <Account
+                                loading={ inProgress }
+                                userData={ selfInfo }
+                                possibleVotes={ listInfo && listInfo.possibleVotes }
+                                refresh={ this._refresh.bind(this) } />
                         </div>
                     </div>
                 </div>
@@ -359,79 +363,6 @@ export default class Wrapper extends React.Component {
         );
     }
 
-    renderSelf(inProgress) {
-        let { listInfo, selfInfo, isFetchingSelf } = this.state;
-
-        if ( !selfInfo ) {
-            if ( isFetchingSelf ) {
-                return (
-                    <div className={ `${block}__self-info` }>
-                        Loading user info...
-                    </div>
-                );
-            }
-            
-            return (
-                <div className={ `${block}__login-button` }>
-                    <button onClick={() => {
-                        api.startLogin(window.location + '');
-                    }}>
-                        Login with Github&nbsp;
-                        <img src={ GithubMark } />
-                    </button>
-                </div>
-            );
-
-        } else {
-            return (
-                <div className={ `${block}__self-info` }>
-                    <div className={ `${block}__userinfo` }>
-                        <img alt={ selfInfo.login } src={ selfInfo.avatar } />
-                        { selfInfo.login }
-                    </div>
-
-                    { listInfo && (
-                        <ul className={ `${block}__currency-list` }>
-                            { 
-                                selfInfo.currencies
-                                    .filter(currency => listInfo.possibleVotes.some(voteSettings => voteSettings.currency === currency.name))
-                                    .map(currency => (
-                                        <li 
-                                            key={ currency.name } 
-                                            className={ `${block}__currency-${currency.name}` } 
-                                            title={ `${currency.description}\nYou used ${currency.used} of a total of ${currency.value} ${currency.displayName}.` }>
-                                            { currency.remaining } { currency.displayName }
-                                        </li>
-                                    )) 
-                            }
-                        </ul> 
-                    )}
-
-                    <div className={ `${block}__button-area` }>
-                        <button 
-                            className={ `${block}__logout-button` } 
-                            onClick={() => {
-                                delete window.localStorage.voteAppToken;
-                                window.location.reload();
-                            }}>
-                            Logout
-                        </button>
-
-                        <button 
-                            className="vote-app__update-button" 
-                            disabled={ inProgress } 
-                            onClick={() => {
-                                this.updateUser();
-                                this.updateList();
-                            }}>
-                            Update
-                        </button>
-                    </div>
-                </div>
-            );
-        }
-    }
-
     findByName(array, name) {
         for (var i = 0; i < array.length; i++)
             if (array[i].name === name)
@@ -517,5 +448,14 @@ export default class Wrapper extends React.Component {
 
                 this.updateList();
             });
+    }
+
+    /**
+     * Refresh user information and topic list
+     * 
+     */
+    _refresh() {
+        this.updateUser();
+        this.updateList();
     }
 }
