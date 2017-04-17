@@ -6,6 +6,9 @@ import CreateTopic from 'Components/create-topic/create-topic';
 import GithubMark from './github-logo.svg';
 import './wrapper-style';
 
+// Specify BEM block name
+const block = 'wrapper';
+
 function updateByProperty(array, property, propertyValue, update) {
     return array.map(item => {
         if (item[property] === propertyValue) {
@@ -28,7 +31,6 @@ export default class Wrapper extends React.Component {
             isVoting: 0
         };
     }
-
 
     componentDidMount() {
         let { selfInfo, listInfo } = this.state;
@@ -188,21 +190,25 @@ export default class Wrapper extends React.Component {
         });
 
         return (
-            <div className="vote-app">
-                <div className="vote-app__influence">
-                    <div className="vote-app__top">
-                        <div className="vote-app__influence">
-                            <div className="vote-app__influence-description">
-                                <Influence className="vote-app__influence-section" type="normal"/>
-                                <Influence className="vote-app__influence-section" type="golden"/>
+            <div className={ block }>
+                <div className={ `${block}__influence` }>
+                    <div className={ `${block}__top` }>
+                        <div className={ `${block}__influence` }>
+                            <div className={ `${block}__influence-description` }>
+                                <Influence 
+                                    className={ `${block}__influence-section` } 
+                                    type="normal" />
+                                <Influence 
+                                    className={ `${block}__influence-section`} 
+                                    type="golden" />
                             </div>
 
-                            <div className="vote-app__influence-disclaimer">
+                            <div className={ `${block}__influence-disclaimer` }>
                                 DISCLAIMER: Since this feature is its Alpha stages, the formula for calculating influence may change.
                             </div>
                         </div>
 
-                        <div className="vote-app__user-section">
+                        <div className={ `${block}__user-section` }>
                             { this.renderSelf(inProgress) }
                         </div>
                     </div>
@@ -213,12 +219,12 @@ export default class Wrapper extends React.Component {
                         <h1>{ listInfo.displayName }</h1>
                         <div>{ listInfo.description }</div>
 
-                        <ul className="vote-app__items-list">
+                        <ul className={ `${block}__items-list` }>
                             { listInfo.items.map(item => (
-                                <li key={item.id}>
-                                    <div className="vote-app__item-card">
-                                        <div className="vote-app__score-section">
-                                            <div className="vote-app__item-score">
+                                <li key={ item.id }>
+                                    <div className={ `${block}__item-card` }>
+                                        <div className={ `${block}__score-section` }>
+                                            <div className={ `${block}__item-score` }>
                                                 { item.score }
                                             </div>
 
@@ -233,9 +239,9 @@ export default class Wrapper extends React.Component {
                                                 if (currencyInfo && currencyInfo.remaining + value < maximum) maximum = currencyInfo.remaining + value;
 
                                                 return (
-                                                    <div key={ voteSettings.name } className="vote-app__item-button">
+                                                    <div key={ voteSettings.name } className={ `${block}__item-button` }>
                                                         <VoteButton
-                                                            className={ 'vote-app__vote-' + voteSettings.name }
+                                                            className={ `${block}__vote-${voteSettings.name}` }
                                                             value={ vote.votes }
                                                             myValue={ value }
                                                             maxUp={ userVote ? maximum - value : 0 }
@@ -251,8 +257,11 @@ export default class Wrapper extends React.Component {
                                         </div>
 
                                         { editItem !== item.id && (
-                                            <div className="vote-app__item-content">
-                                                <span className="vote-app__item-title">{ item.title }</span>
+                                            <div className={ `${block}__item-content` }>
+                                                <span className={ `${block}__item-title` }>
+                                                    { item.title }
+                                                </span>
+
                                                 <span>{ item.description }</span>
 
                                                 { listInfo.isAdmin && (
@@ -341,13 +350,20 @@ export default class Wrapper extends React.Component {
                                         )}
 
                                         { editItem === item.id && (
-                                            <div className="vote-app__item-content">
-                                                <div className="vote-app__item-title">
-                                                    <input className="vote-app__item-edit-title" type="text" value={editItemTitle} onChange={e => this.setState({ editItemTitle: e.target.value })} />
+                                            <div className={ `${block}__item-content` }>
+                                                <div className={ `${block}__item-title` }>
+                                                    <input 
+                                                        className={ `${block}__item-edit-title` } 
+                                                        type="text" 
+                                                        value={ editItemTitle } 
+                                                        onChange={e => this.setState({ editItemTitle: e.target.value })} />
                                                 </div>
 
                                                 <div>
-                                                    <textarea className="vote-app__item-edit-description" value={editItemDescription} onChange={e => this.setState({ editItemDescription: e.target.value })} />
+                                                    <textarea 
+                                                        className={ `${block}__item-edit-description` } 
+                                                        value={ editItemDescription } 
+                                                        onChange={e => this.setState({ editItemDescription: e.target.value })} />
                                                 </div>
 
                                                 <div>
@@ -392,11 +408,15 @@ export default class Wrapper extends React.Component {
 
         if ( !selfInfo ) {
             if ( isFetchingSelf ) {
-                return <div className="vote-app__self-info">Loading user info...</div>;
+                return (
+                    <div className={ `${block}__self-info` }>
+                        Loading user info...
+                    </div>
+                );
             }
             
             return (
-                <div className="vote-app__login-button">
+                <div className={ `${block}__login-button` }>
                     <button onClick={() => {
                         api.startLogin(window.location + '');
                     }}>
@@ -408,22 +428,22 @@ export default class Wrapper extends React.Component {
 
         } else {
             return (
-                <div className="vote-app__self-info">
-                    <div className="vote-app__userinfo" >
-                        <img alt={selfInfo.login} src={selfInfo.avatar} />
+                <div className={ `${block}__self-info` }>
+                    <div className={ `${block}__userinfo` }>
+                        <img alt={ selfInfo.login } src={ selfInfo.avatar } />
                         { selfInfo.login }
                     </div>
 
                     { listInfo && (
-                        <ul className="vote-app__currency-list">
+                        <ul className={ `${block}__currency-list` }>
                             { 
                                 selfInfo.currencies
                                     .filter(currency => listInfo.possibleVotes.some(voteSettings => voteSettings.currency === currency.name))
                                     .map(currency => (
                                         <li 
                                             key={ currency.name } 
-                                            className={ 'vote-app__currency-' + currency.name } 
-                                            title={`${currency.description}\nYou used ${currency.used} of a total of ${currency.value} ${currency.displayName}.`}>
+                                            className={ `${block}__currency-${currency.name}` } 
+                                            title={ `${currency.description}\nYou used ${currency.used} of a total of ${currency.value} ${currency.displayName}.` }>
                                             { currency.remaining } { currency.displayName }
                                         </li>
                                     )) 
@@ -431,16 +451,25 @@ export default class Wrapper extends React.Component {
                         </ul> 
                     )}
 
-                    <div className="vote-app__button-area">
-                        <button className="vote-app__logout-button" onClick={() => {
-                            delete window.localStorage.voteAppToken;
-                            window.location.reload();
-                        }}>Logout</button>
+                    <div className={ `${block}__button-area` }>
+                        <button 
+                            className={ `${block}__logout-button` } 
+                            onClick={() => {
+                                delete window.localStorage.voteAppToken;
+                                window.location.reload();
+                            }}>
+                            Logout
+                        </button>
 
-                        <button className="vote-app__update-button" disabled={inProgress} onClick={() => {
-                            this.updateUser();
-                            this.updateList();
-                        }}>Update</button>
+                        <button 
+                            className="vote-app__update-button" 
+                            disabled={ inProgress } 
+                            onClick={() => {
+                                this.updateUser();
+                                this.updateList();
+                            }}>
+                            Update
+                        </button>
                     </div>
                 </div>
             );
