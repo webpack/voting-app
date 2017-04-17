@@ -18,6 +18,8 @@ export default class Wrapper extends React.Component {
     constructor(props) {
         super(props);
 
+        this._supportedBrowser = typeof localStorage === 'object';
+
         this.state = {
             selfInfo: undefined,
             listInfo: undefined,
@@ -26,14 +28,11 @@ export default class Wrapper extends React.Component {
         };
     }
 
-    isBrowserSupported() {
-        return typeof localStorage === 'object';
-    }
 
     componentDidMount() {
         let { selfInfo, listInfo } = this.state;
 
-        if ( !this.isBrowserSupported() ) return;
+        if ( !this._supportedBrowser ) return;
 
         if ( api.isLoginActive() ) {
             this.setState({
@@ -51,7 +50,7 @@ export default class Wrapper extends React.Component {
     }
 
     componentWillReceiveProps(props) {
-        if ( !this.isBrowserSupported() ) return;
+        if ( !this._supportedBrowser ) return;
 
         this.updateList(props);
     }
@@ -169,7 +168,7 @@ export default class Wrapper extends React.Component {
 
         const inProgress = isFetchingList || isFetchingSelf || isCreating || isVoting;
 
-        if ( !this.isBrowserSupported() ) {
+        if ( !this._supportedBrowser ) {
             return <div>Your browser is not supported.</div>;
         }
 
