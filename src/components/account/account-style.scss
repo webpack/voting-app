@@ -1,0 +1,93 @@
+@import 'functions';
+
+.account {
+    &__inner {
+        margin-top: 10px;
+    }
+
+    &__login {
+        margin: 20px 0;
+
+        button {
+            border: none;
+            outline: none;
+            color: getColor(white);
+            background: getColor(elephant);
+            padding: 5px 10px 5px 10px;
+            border-radius: 2px;
+            font-size: 13px;
+            cursor: pointer;
+
+            &:hover {
+                background: black;
+            }
+
+            &:active {
+                background: getColor(elephant)
+            }
+        }
+
+        img {
+            height: 25px;
+            vertical-align: middle;
+            padding-left: 5px;
+        }
+    }
+
+    &__info {
+        outline: none;
+        border: none;
+        background: getColor(elephant);
+        color: white;
+        border-radius: 3px;
+        font-size: 13px;
+        display: inline-block;
+        padding: 3px 10px;
+
+        img {
+            height: 25px;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+    }
+
+    &__currencies {
+        padding: 0;
+
+        & > li {
+            display: inline-block;
+            padding: 5px;
+        }
+    }
+
+    &__options {
+        margin: 5px 0;
+    }
+
+    // TODO: These currency styles used to be shared between here and list items
+    // Maybe use a mixin instead?
+
+    &__currency-influence {
+        color: blue;
+
+        &:before {
+            content: "◆\2009";
+        }
+    }
+
+    &__currency-goldenInfluence {
+        color: #bfa203;
+
+        &:before {
+            content: "◇\2009";
+        }
+    }
+
+    &__currency-support {
+        color: green;
+
+        &:before {
+            content: "$\2009";
+        }
+    }
+}
