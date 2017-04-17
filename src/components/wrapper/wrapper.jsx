@@ -188,12 +188,6 @@ export default class Wrapper extends React.Component {
 
         return (
             <div className="vote-app">
-                {/* TODO: Add cleaner title or no title
-                    <div className="vote-app__title">
-                        Vote
-                    </div>
-                */}
-
                 <div className="vote-app__influence">
                     <div className="vote-app__top">
                         <div className="vote-app__influence">
