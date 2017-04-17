@@ -2,6 +2,7 @@ import React from 'react';
 import * as api from 'Utils/js/api';
 import VoteButton from 'Components/button/button';
 import Influence from 'Components/influence/influence';
+import CreateTopic from 'Components/create-topic/create-topic';
 import GithubMark from './github-logo.svg';
 import './wrapper-style';
 
@@ -375,58 +376,12 @@ export default class Wrapper extends React.Component {
                                     </div>
                                 </li>
                             ))}
-
-                            { listInfo.isAdmin && (
-                                <li className="vote-app__admin">
-                                    <div>
-                                        <input 
-                                            type="text" 
-                                            value={ this.state.newTitle } 
-                                            disabled={ inProgress } 
-                                            onChange={ e => this.setState({newTitle: e.target.value}) } />
-                                    </div>
-
-                                    <div>
-                                        <textarea 
-                                            rows="4" 
-                                            value={ this.state.newDescription } 
-                                            disabled={ inProgress } 
-                                            onChange={ e => this.setState({newDescription: e.target.value}) } />
-                                    </div>
-
-                                    <div>
-                                        <button onClick={() => {
-                                            const { newTitle, newDescription } = this.state;
-                                            
-                                            if (newTitle && newDescription) {
-                                                this.setState({
-                                                    isCreating: true
-                                                });
-
-                                                api.createItem(voteAppToken, name, newTitle, newDescription)
-                                                    .then(item => {
-                                                        this.setState({
-                                                            newTitle: '',
-                                                            newDescription: '',
-                                                            isCreating: false,
-                                                            listInfo: listInfo && {
-                                                                ...listInfo,
-                                                                items: [
-                                                                    ...listInfo.items,
-                                                                    item
-                                                                ]
-                                                            }
-                                                        });
-                                                    });
-                                            }
-                                        }}>
-                                            Create Item
-                                        </button>
-                                    </div>
-                                </li> 
-                            )}
                         </ul>
                     </div> 
+                )}
+
+                { listInfo && listInfo.isAdmin && (
+                    <CreateTopic onCreate={ this._createTopic.bind(this) } />
                 )}
             </div>
         );
@@ -524,5 +479,35 @@ export default class Wrapper extends React.Component {
             case 'thumb': return '#535353';
             default: return undefined;
         }
+    }
+
+    /**
+     * Create a new topic for voting
+     * 
+     * @param  {string} title       - The topic title
+     * @param  {string} description - The topic description
+     */
+    _createTopic(title, description) {
+        let { name } = this.props,
+            { listInfo } = this.state,
+            { voteAppToken } = localStorage;
+
+        this.setState({
+            isCreating: true
+        });
+
+        api.createItem(voteAppToken, name, title, description)
+            .then(item => {
+                this.setState({
+                    isCreating: false,
+                    listInfo: listInfo && {
+                        ...listInfo,
+                        items: [
+                            ...listInfo.items,
+                            item
+                        ]
+                    }
+                });
+            });
     }
 }
