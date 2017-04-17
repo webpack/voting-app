@@ -47,69 +47,15 @@ export default class Wrapper extends React.Component {
             });
 
         } else {
-            if (!selfInfo) this.updateUser();
-            if (!listInfo) this.updateList();
+            if (!selfInfo) this._updateUser();
+            if (!listInfo) this._updateList();
         }
     }
 
     componentWillReceiveProps(props) {
         if ( !this._supportedBrowser ) return;
 
-        this.updateList(props);
-    }
-
-    /**
-     * Fetch user information and available influence
-     * 
-     */
-    updateUser() {
-        let { voteAppToken } = localStorage;
-
-        if (voteAppToken) {
-            this.setState({
-                isFetchingSelf: true
-            });
-
-            api.getSelf(voteAppToken).catch(e => {
-                this.setState({
-                    selfInfo: null,
-                    isFetchingSelf: false
-                });
-            }).then(result => {
-                this.setState({
-                    selfInfo: result,
-                    isFetchingSelf: false
-                });
-            });
-        }
-    }
-
-    /**
-     * Fetch the list of voting topics
-     * 
-     * @param  {object} props - The props to use
-     */
-    updateList(props = this.props) {
-        let { name } = props,
-            { voteAppToken } = localStorage;
-
-        this.setState({
-            isFetchingList: true
-        });
-
-        api.getList(voteAppToken, name)
-            .catch(e => {
-                this.setState({
-                    listInfo: null,
-                    isFetchingList: false
-                });
-            })
-            .then(result => {
-                this.setState({
-                    listInfo: result,
-                    isFetchingList: false
-                });
-            });
+        this._updateList(props);
     }
 
     localVote(itemId, voteName, diffValue, currencyName, score) {
@@ -346,7 +292,7 @@ export default class Wrapper extends React.Component {
                                                                 isCreating: false
                                                             });
 
-                                                            this.updateList();
+                                                            this._updateList();
                                                         });
                                                     }}>
                                                         Done Editing
@@ -403,6 +349,58 @@ export default class Wrapper extends React.Component {
     }
 
     /**
+     * Fetch user information and available influence
+     * 
+     */
+    _updateUser() {
+        let { voteAppToken } = localStorage;
+
+        if (voteAppToken) {
+            this.setState({
+                isFetchingSelf: true
+            });
+
+            api.getSelf(voteAppToken)
+                .then(result => {
+                    this.setState({ selfInfo: result });
+                })
+                .catch(error => {
+                    console.error('Failed to fetch user information: ', error);
+                    this.setState({ selfInfo: null });
+                })
+                .then(() => {
+                    this.setState({ isFetchingSelf: false });
+                });
+        }
+    }
+
+    /**
+     * Fetch the list of voting topics
+     * 
+     * @param  {object} props - The props to use
+     */
+    _updateList(props = this.props) {
+        let { name } = props,
+            { voteAppToken } = localStorage;
+
+        this.setState({
+            isFetchingList: true
+        });
+
+        api.getList(voteAppToken, name)
+            .then(result => {
+                this.setState({ listInfo: result });
+            })
+            .catch(error => {
+                console.error('Failed to fetch topic list: ', error);
+                this.setState({ listInfo: null });
+            })
+            .then(() => {
+                this.setState({ isFetchingList: false });
+            });
+    }
+
+    /**
      * Create a new topic for voting
      * 
      * @param  {string} title       - The topic title
@@ -451,7 +449,7 @@ export default class Wrapper extends React.Component {
                     isCreating: false
                 });
 
-                this.updateList();
+                this._updateList();
             });
     }
 
@@ -460,7 +458,7 @@ export default class Wrapper extends React.Component {
      * 
      */
     _refresh() {
-        this.updateUser();
-        this.updateList();
+        this._updateUser();
+        this._updateList();
     }
 }
