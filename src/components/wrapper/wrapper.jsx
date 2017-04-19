@@ -28,6 +28,9 @@ export default class Wrapper extends React.Component {
             selfInfo: undefined,
             listInfo: undefined,
             isFetchingSelf: false,
+            isFetchingList: false,
+            isCreating: false,
+            isLoginActive: false,
             isVoting: 0
         };
     }
