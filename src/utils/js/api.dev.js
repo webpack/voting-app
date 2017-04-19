@@ -117,8 +117,8 @@ export function getList(token, name) {
 
     return delay(500).then(() => ({
         name: name,
-        displayName: 'DEV: ' + name,
-        description: 'Some **description**',
+        displayName: 'Development Mode: ' + name,
+        description: 'These items are simply for testing functionality...',
         lockable: true,
         deletable: true,
         archivable: true,
