@@ -1,8 +1,8 @@
 import React from 'react';
 import * as api from 'Utils/js/api';
-import VoteButton from 'Components/button/button';
 import Influence from 'Components/influence/influence';
 import Account from 'Components/account/account';
+import Topic from 'Components/topic/topic';
 import CreateTopic from 'Components/create-topic/create-topic';
 import './wrapper-style';
 
@@ -117,8 +117,7 @@ export default class Wrapper extends React.Component {
     }
 
     render() {
-        let { voteAppToken } = localStorage,
-            { isVoting, isFetchingList, isFetchingSelf, isCreating, isLoginActive } = this.state,
+        let { isVoting, isFetchingList, isFetchingSelf, isCreating, isLoginActive } = this.state,
             { selfInfo, listInfo, editItem, editItemTitle, editItemDescription } = this.state,
             maxVoteInfo = listInfo && listInfo.possibleVotes.map(() => 0);
 
@@ -176,135 +175,15 @@ export default class Wrapper extends React.Component {
                         <h1>{ listInfo.displayName }</h1>
                         <div>{ listInfo.description }</div>
 
-                        <ul className={ `${block}__items-list` }>
-                            { listInfo.items.map(item => (
-                                <li key={ item.id }>
-                                    <div className={ `${block}__item-card` }>
-                                        <div className={ `${block}__score-section` }>
-                                            <div className={ `${block}__item-score` }>
-                                                { item.score }
-                                            </div>
-
-                                            { listInfo.possibleVotes.map((voteSettings, idx) => {
-                                                let vote = item.votes[idx],
-                                                    userVote = item.userVotes && item.userVotes[idx],
-                                                    currencyInfo = selfInfo && voteSettings.currency && selfInfo.currencies.find(currency => currency.name === voteSettings.currency),
-                                                    maximum = voteSettings.maximum || 1000,
-                                                    minimum = voteSettings.minimum || 0,
-                                                    value = (userVote && userVote.votes) ? userVote.votes: 0;
-
-                                                if (currencyInfo && currencyInfo.remaining + value < maximum) {
-                                                    maximum = currencyInfo.remaining + value;
-                                                }
-
-                                                return (
-                                                    <div key={ voteSettings.name } className={ `${block}__item-button` }>
-                                                        <VoteButton
-                                                            className={ `${block}__vote-${voteSettings.name}` }
-                                                            value={ vote.votes }
-                                                            myValue={ value }
-                                                            maxUp={ userVote ? maximum - value : 0 }
-                                                            maxDown={ userVote ? value - minimum : 0 }
-                                                            color={ this._getInfluenceColor(voteSettings.name) }
-                                                            canVote = { !!voteAppToken && !item.locked }
-                                                            onVote={(diffValue) => {
-                                                                this.vote(item.id, voteSettings.name, diffValue, voteSettings.currency, voteSettings.score);
-                                                            }} />
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-
-                                        { editItem !== item.id && (
-                                            <div className={ `${block}__item-content` }>
-                                                <span className={ `${block}__item-title` }>
-                                                    { item.title }
-                                                </span>
-
-                                                <span>{ item.description }</span>
-
-                                                { listInfo.isAdmin && (
-                                                    <div>
-                                                        <button onClick={ 
-                                                            this._changeTopicSettings.bind(this, item.id, { locked: true }) 
-                                                        }>
-                                                            Lock
-                                                        </button>
-
-                                                        <button onClick={
-                                                            this._changeTopicSettings.bind(this, item.id, { locked: false })
-                                                        }>
-                                                            Unlock
-                                                        </button>
-
-                                                        <button onClick={
-                                                            this._changeTopicSettings.bind(this, item.id, { archived: true })
-                                                        }>
-                                                            Archive
-                                                        </button>
-
-                                                        <button onClick={
-                                                            this._changeTopicSettings.bind(this, item.id, { archived: false })
-                                                        }>
-                                                            Unarchive
-                                                        </button>
-
-                                                        <button onClick={() => {
-                                                            this.setState({
-                                                                isCreating: true,
-                                                                editItem: item.id,
-                                                                editItemTitle: item.title,
-                                                                editItemDescription: item.description
-                                                            });
-                                                        }}>
-                                                            Edit
-                                                        </button>
-                                                    </div> 
-                                                )}
-                                            </div> 
-                                        )}
-
-                                        { editItem === item.id && (
-                                            <div className={ `${block}__item-content` }>
-                                                <div className={ `${block}__item-title` }>
-                                                    <input 
-                                                        className={ `${block}__item-edit-title` } 
-                                                        type="text" 
-                                                        value={ editItemTitle } 
-                                                        onChange={e => this.setState({ editItemTitle: e.target.value })} />
-                                                </div>
-
-                                                <div>
-                                                    <textarea 
-                                                        className={ `${block}__item-edit-description` } 
-                                                        value={ editItemDescription } 
-                                                        onChange={e => this.setState({ editItemDescription: e.target.value })} />
-                                                </div>
-
-                                                <div>
-                                                    <button onClick={() => {
-                                                        this.setState({
-                                                            editItem: null,
-                                                            isCreating: true
-                                                        });
-
-                                                        api.configItem(voteAppToken, item.id, {
-                                                            description: editItemDescription,
-                                                            title: editItemTitle
-                                                        }).then(() => {
-                                                            this.setState({
-                                                                isCreating: false
-                                                            });
-
-                                                            this._updateList();
-                                                        });
-                                                    }}>
-                                                        Done Editing
-                                                    </button>
-                                                </div>
-                                            </div> 
-                                        )}
-                                    </div>
+                        <ul className={ `${block}__topics` }>
+                            { listInfo.items.map(topic => (
+                                <li key={ topic.id }>
+                                    <Topic
+                                        user={ selfInfo }
+                                        admin={ listInfo.isAdmin }
+                                        topic={ topic }
+                                        votes={ listInfo.possibleVotes }
+                                        onChangeSettings={ this._changeTopicSettings.bind(this) } />
                                 </li>
                             ))}
                         </ul>
@@ -316,21 +195,6 @@ export default class Wrapper extends React.Component {
                 )}
             </div>
         );
-    }
-
-    /**
-     * Get color for the given influence [name]
-     * 
-     * @param {string} name - Infuence type
-     * @return {string} - A valid CSS color value
-     */
-    _getInfluenceColor(name) {
-        switch (name) {
-            case 'influence': return 'blue';
-            case 'golden': return '#bfa203';
-            case 'thumb': return '#535353';
-            default: return undefined;
-        }
     }
 
     /**
