@@ -114,8 +114,7 @@ export default class Wrapper extends React.Component {
     }
 
     render() {
-        let { name } = this.props,
-            { voteAppToken } = localStorage,
+        let { voteAppToken } = localStorage,
             { isVoting, isFetchingList, isFetchingSelf, isCreating, isLoginActive } = this.state,
             { selfInfo, listInfo, editItem, editItemTitle, editItemDescription } = this.state,
             maxVoteInfo = listInfo && listInfo.possibleVotes.map(() => 0);
@@ -184,14 +183,16 @@ export default class Wrapper extends React.Component {
                                             </div>
 
                                             { listInfo.possibleVotes.map((voteSettings, idx) => {
-                                                let vote = item.votes[idx];
-                                                let userVote = item.userVotes && item.userVotes[idx];
-                                                let currencyInfo = selfInfo && voteSettings.currency && this.findByName(selfInfo.currencies, voteSettings.currency);
-                                                let maximum = voteSettings.maximum || 1000; // infinity
-                                                let minimum = voteSettings.minimum || 0;
-                                                let value = (userVote && userVote.votes) ? userVote.votes: 0;
+                                                let vote = item.votes[idx],
+                                                    userVote = item.userVotes && item.userVotes[idx],
+                                                    currencyInfo = selfInfo && voteSettings.currency && selfInfo.currencies.find(currency => currency.name === voteSettings.currency),
+                                                    maximum = voteSettings.maximum || 1000,
+                                                    minimum = voteSettings.minimum || 0,
+                                                    value = (userVote && userVote.votes) ? userVote.votes: 0;
 
-                                                if (currencyInfo && currencyInfo.remaining + value < maximum) maximum = currencyInfo.remaining + value;
+                                                if (currencyInfo && currencyInfo.remaining + value < maximum) {
+                                                    maximum = currencyInfo.remaining + value;
+                                                }
 
                                                 return (
                                                     <div key={ voteSettings.name } className={ `${block}__item-button` }>
@@ -312,31 +313,6 @@ export default class Wrapper extends React.Component {
                 )}
             </div>
         );
-    }
-
-    findByName(array, name) {
-        for (var i = 0; i < array.length; i++)
-            if (array[i].name === name)
-                return array[i];
-
-        return null;
-    }
-
-    getNiceVoteValues(maximum) {
-        var arr = [];
-        var b = true;
-
-        for(var x = 1; x < maximum; x *= b ? 5 : 2, b = !b) {
-            arr.push(x);
-        }
-
-        if (maximum) arr.push(maximum);
-
-        return arr;
-    }
-
-    getStep(maximum) {
-        return Math.floor(maximum / 20) * 2 || 1;
     }
 
     getColor(name) {
