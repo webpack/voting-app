@@ -202,7 +202,7 @@ export default class Wrapper extends React.Component {
                                                             myValue={ value }
                                                             maxUp={ userVote ? maximum - value : 0 }
                                                             maxDown={ userVote ? value - minimum : 0 }
-                                                            color={ this.getColor(voteSettings.name) }
+                                                            color={ this._getInfluenceColor(voteSettings.name) }
                                                             canVote = { !!voteAppToken && !item.locked }
                                                             onVote={(diffValue) => {
                                                                 this.vote(item.id, voteSettings.name, diffValue, voteSettings.currency, voteSettings.score);
@@ -315,7 +315,13 @@ export default class Wrapper extends React.Component {
         );
     }
 
-    getColor(name) {
+    /**
+     * Get color for the given influence [name]
+     * 
+     * @param {string} name - Infuence type
+     * @return {string} - A valid CSS color value
+     */
+    _getInfluenceColor(name) {
         switch (name) {
             case 'influence': return 'blue';
             case 'golden': return '#bfa203';
