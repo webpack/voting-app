@@ -47,9 +47,7 @@ export default class Topic extends React.Component {
                                     maxDown={ userVote ? value - minimum : 0 }
                                     color={ this._getInfluenceColor(settings.name) }
                                     canVote = { !!user && !topic.locked }
-                                    onVote={ (diffValue) => {
-                                        this.props.vote(topic.id, settings.name, diffValue, settings.currency, settings.score);
-                                    } } />
+                                    onVote={ this._vote.bind(this, settings) } />
                             </div>
                         );
                     })}
@@ -132,20 +130,33 @@ export default class Topic extends React.Component {
     }
 
     /**
+     * Trigger voting process
+     *
+     * @param {object} settings   - Data describing the type of vote
+     * @param {number} difference - Amount to change influence
+     */
+    _vote(settings = {}, difference) {
+        let { topic } = this.props;
+
+        this.props.onVote(
+            topic.id, 
+            settings.name, 
+            difference, 
+            settings.currency, 
+            settings.score
+        );
+    }
+
+    /**
      * Enable topic editing
      * 
      * @param {object} e - React synthetic event
      */
     _edit(e) {
+        // TODO: Set isCreating in Wrapper via a this.props.edit callback?
         this.setState({
             editable: true
         });
-        // this.setState({
-        //     isCreating: true,
-        //     editItem: item.id,
-        //     editItemTitle: item.title,
-        //     editItemDescription: item.description
-        // });
     }
 
     /**

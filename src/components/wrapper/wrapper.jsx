@@ -9,15 +9,6 @@ import './wrapper-style';
 // Specify BEM block name
 const block = 'wrapper';
 
-function updateByProperty(array, property, propertyValue, update) {
-    return array.map(item => {
-        if (item[property] === propertyValue) {
-            return update(item);
-
-        } else return item;
-    });
-}
-
 export default class Wrapper extends React.Component {
     constructor(props) {
         super(props);
@@ -59,61 +50,6 @@ export default class Wrapper extends React.Component {
         if ( !this._supportedBrowser ) return;
 
         this._updateList(props);
-    }
-
-    localVote(itemId, voteName, diffValue, currencyName, score) {
-        let { selfInfo, listInfo } = this.state;
-
-        this.setState({
-            isVoting: this.state.isVoting + 1,
-            listInfo: listInfo && {
-                ...listInfo,
-                items: updateByProperty(listInfo.items, 'id', itemId, item => ({
-                    ...item,
-                    votes: updateByProperty(item.votes, 'name', voteName, vote => ({
-                        ...vote,
-                        votes: vote.votes + diffValue
-                    })),
-                    userVotes: updateByProperty(item.userVotes, 'name', voteName, vote => ({
-                        ...vote,
-                        votes: vote.votes + diffValue
-                    })),
-                    score: item.score + score * diffValue
-                }))
-            },
-            selfInfo: selfInfo && {
-                ...selfInfo,
-                currencies: updateByProperty(selfInfo.currencies, 'name', currencyName, currency => ({
-                    ...currency,
-                    used: currency.used + diffValue,
-                    remaining: currency.remaining - diffValue
-                }))
-            }
-        });
-    }
-
-    vote(itemId, voteName, diffValue, currencyName, score) {
-        let { voteAppToken } = localStorage;
-
-        if (!diffValue) return;
-
-        this.localVote(itemId, voteName, diffValue, currencyName, score);
-
-        api.vote(voteAppToken, itemId, voteName, diffValue)
-            .catch(e => {
-                console.error(e);
-
-                // revert local vote
-                this.localVote(itemId, voteName, -diffValue, currencyName, score);
-                this.setState({
-                    isVoting: this.state.isVoting - 1
-                });
-            })
-            .then(() => {
-                this.setState({
-                    isVoting: this.state.isVoting - 1
-                });
-            });
     }
 
     render() {
@@ -183,6 +119,7 @@ export default class Wrapper extends React.Component {
                                         admin={ listInfo.isAdmin }
                                         topic={ topic }
                                         votes={ listInfo.possibleVotes }
+                                        onVote={ this._vote.bind(this) }
                                         onChangeSettings={ this._changeTopicSettings.bind(this) } />
                                 </li>
                             ))}
@@ -226,7 +163,7 @@ export default class Wrapper extends React.Component {
     /**
      * Fetch the list of voting topics
      * 
-     * @param  {object} props - The props to use
+     * @param {object} props - The props to use
      */
     _updateList(props = this.props) {
         let { name } = props,
@@ -252,8 +189,8 @@ export default class Wrapper extends React.Component {
     /**
      * Create a new topic for voting
      * 
-     * @param  {string} title       - The topic title
-     * @param  {string} description - The topic description
+     * @param {string} title       - The topic title
+     * @param {string} description - The topic description
      */
     _createTopic(title = '', description = '') {
         let { name } = this.props,
@@ -282,8 +219,8 @@ export default class Wrapper extends React.Component {
     /**
      * Change a topics settings (e.g. archive status)
      * 
-     * @param  {number} id      - The ID of the topic
-     * @param  {object} options - The new settings
+     * @param {number} id      - The ID of the topic
+     * @param {object} options - The new settings
      */
     _changeTopicSettings(id, options = {}) {
         let { voteAppToken } = localStorage;
@@ -309,5 +246,93 @@ export default class Wrapper extends React.Component {
     _refresh() {
         this._updateUser();
         this._updateList();
+    }
+
+    /**
+     * Register new vote on a topic
+     * 
+     * @param {number} id         - ID of the topic being voted on
+     * @param {string} influence  - The name of influence used
+     * @param {number} difference - The change in influence
+     * @param {string} currency   - The type of influence used
+     * @param {number} score      - Amount influence is worth (?)
+     */
+    _vote(id, influence, difference, currency, score) {
+        let { voteAppToken } = localStorage;
+
+        if ( !difference ) return;
+
+        this._localVote(id, influence, difference, currency, score);
+
+        api.vote(voteAppToken, id, influence, difference)
+            .catch(e => {
+                console.error(e);
+
+                // Revert local vote
+                this._localVote(id, influence, -difference, currency, score);
+            })
+            .then(() => {
+                this.setState({
+                    isVoting: this.state.isVoting - 1
+                });
+            });
+    }
+
+    /**
+     * Update local data to reflect new vote
+     * 
+     * @param {number} id         - ID of the topic being voted on
+     * @param {string} influence  - The name of influence used
+     * @param {number} difference - The change in influence
+     * @param {string} currency   - The type of influence used
+     * @param {number} score      - Amount influence is worth (?)
+     */
+    _localVote(id, influence, difference, currency, score) {
+        let { listInfo, selfInfo } = this.state;
+
+        this.setState({
+            isVoting: this.state.isVoting + 1,
+            listInfo: listInfo && {
+                ...listInfo,
+                items: this._updateByProperty(listInfo.items, 'id', id, item => ({
+                    ...item,
+                    votes: this._updateByProperty(item.votes, 'name', influence, vote => ({
+                        ...vote,
+                        votes: vote.votes + difference
+                    })),
+                    userVotes: this._updateByProperty(item.userVotes, 'name', influence, vote => ({
+                        ...vote,
+                        votes: vote.votes + difference
+                    })),
+                    score: item.score + score * difference
+                }))
+            },
+            selfInfo: selfInfo && {
+                ...selfInfo,
+                currencies: this._updateByProperty(selfInfo.currencies, 'name', currency, currency => ({
+                    ...currency,
+                    used: currency.used + difference,
+                    remaining: currency.remaining - difference
+                }))
+            }
+        });
+    }
+
+    /**
+     * Update an object within an array
+     * 
+     * @param  {array}    array    - The array containing the object to update
+     * @param  {string}   property - A key used to find the target object
+     * @param  {any}      value    - A value used to find the target object
+     * @param  {function} update   - A callback to update that object (takes object as parameter)
+     * @return {array}             - The modified array
+     */
+    _updateByProperty(array, property, value, update) {
+        return array.map(item => {
+            if (item[property] === value) {
+                return update(item);
+
+            } else return item;
+        });
     }
 }
