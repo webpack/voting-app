@@ -47,7 +47,7 @@
     "webpack-dev-server": "^2.4.2",
     "webpack-merge": "^4.1.0"
   },
-  "dependencies": {
+  "devDependencies": {
     "react": "^15.5.4",
     "react-dom": "^15.5.4"
   }

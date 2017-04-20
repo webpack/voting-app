@@ -9,5 +9,10 @@ export default env => Merge(CommonConfig(env), {
         new Webpack.optimize.UglifyJsPlugin({
             comments: false
         })
-    ]
+    ],
+
+    externals: {
+        react: 'react',
+        'react-dom': 'react-dom'
+    }
 })
