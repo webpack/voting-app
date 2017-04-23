@@ -1,11 +1,9 @@
 import Path from 'path'
 import Webpack from 'webpack'
+import ExtractTextPlugin from 'extract-text-webpack-plugin'
 
 export default (env = {}) => ({
     context: Path.resolve(__dirname, './src'),
-    entry: {
-        index: './app.jsx'
-    },
 
     resolve: {
         symlinks: false,
@@ -34,19 +32,26 @@ export default (env = {}) => ({
             },
             {
                 test: /\.s?css$/,
-                use: [
-                    'style-loader', 
-                    'css-loader', 
-                    'postcss-loader', 
-                    {
-                        loader: 'sass-loader',
-                        options: {
-                            includePaths: [
-                                Path.resolve(__dirname, './src/utils/scss') 
-                            ]
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: [
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                minimize: !env.dev
+                            }
+                        },
+                        'postcss-loader', 
+                        {
+                            loader: 'sass-loader',
+                            options: {
+                                includePaths: [
+                                    Path.resolve(__dirname, './src/utils/scss') 
+                                ]
+                            }
                         }
-                    }
-                ]
+                    ]
+                })
             },
             {
                 test: /\.(jpg|png|svg)$/,
@@ -61,12 +66,21 @@ export default (env = {}) => ({
     plugins: [
         new Webpack.DefinePlugin({
             'process.env.NODE_ENV': env.dev ? `'development'` : `'production'` 
+        }),
+
+        new ExtractTextPlugin({
+            disable: !!env.dev,
+            filename: 'style.min.css'
         })
     ],
 
     output: {
         path: Path.resolve(__dirname, './dist'),
         publicPath: '/',
-        filename: 'app.min.js'
+        filename: '[name].bundle.js'
+    },
+
+    stats: {
+        children: false
     }
 })
