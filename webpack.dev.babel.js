@@ -8,9 +8,7 @@ import CommonConfig from './webpack.common.babel.js'
 
 export default env => Merge(CommonConfig(env), {
     devtool: 'source-map',
-    entry: {
-        index: './app.jsx'
-    },
+    entry: './app.jsx',
 
     plugins: [
         new HTMLPlugin({
