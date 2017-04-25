@@ -77,7 +77,7 @@ export default (env = {}) => ({
     output: {
         path: Path.resolve(__dirname, './dist'),
         publicPath: '/',
-        filename: '[name].bundle.js'
+        filename: 'vote.bundle.js'
     },
 
     stats: {
