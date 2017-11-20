@@ -7,59 +7,20 @@
 
     &__top {
         display: flex;
-        flex-direction: column;
-
-        @include break(medium) {
-            flex-direction: row;
-        }
+        align-items: center;
     }
 
-    &__influence {
-        flex: 0 0 75%;
+    &__title {
+        flex: 1 1 auto;
+        margin: 0;
     }
 
-    &__influence-description {
+    &__influences {
         display: flex;
-        flex-direction: column;
-
-        @include break(medium) {
-            flex-direction: row;
-        }
-    }
-
-    &__influence-section {
-        flex: 0 0 50%;
-    }
-
-    &__influence-disclaimer {
-        padding: 1em 0;
-        font-size: smaller;
-        color: red;
-
-        @include break(medium) {
-            text-align: center;
-        }
-    }
-
-    &__user-section {
-        padding: 0 0 30px;
-
-        @include break(medium) {
-            flex: 0 0 25%;
-            padding: 0 0 0 20px;
-        }
-
-        @include break(large) {
-            border-left: 2px solid getColor(elephant);
-        }
     }
 
     &__topics {
-        display: block;
-
-        & > li {
-            display: block;
-            padding: 5px 0;
-        }
+        padding: 0;
+        list-style: none;
     }
 }
