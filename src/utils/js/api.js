@@ -17,10 +17,10 @@ const PRODUCTION_HOST = 'webpack.js.org';
 // or by setting PRODUCTION_HOST to "localhost:3000" and stealing localStorage.voteAppToken from the production side.
 
 function checkResult(result) {
-  if ( !result ) throw new Error('No result received');
-  if ( result.errorMessage ) throw new Error(result.errorMessage);
+    if ( !result ) throw new Error('No result received');
+    if ( result.errorMessage ) throw new Error(result.errorMessage);
 
-  return result;
+    return result;
 }
 
 export function isLoginActive() {
