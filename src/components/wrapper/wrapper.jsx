@@ -79,52 +79,46 @@ export default class Wrapper extends React.Component {
 
         return (
             <div className={ block }>
-                <div className={ `${block}__influence` }>
-                    <div className={ `${block}__top` }>
-                        <div className={ `${block}__influence` }>
-                            <div className={ `${block}__influence-description` }>
-                                <Influence 
-                                    className={ `${block}__influence-section` } 
-                                    type="normal" />
-                                <Influence 
-                                    className={ `${block}__influence-section`} 
-                                    type="golden" />
-                            </div>
+                <div className={ `${block}__top` }>
+                    <h1 className={ `${block}__title` }>
+                        Vote and Prioritize
+                    </h1>
 
-                            <div className={ `${block}__influence-disclaimer` }>
-                                DISCLAIMER: Since this feature is its Alpha stages, the formula for calculating influence may change.
-                            </div>
-                        </div>
-
-                        <div className={ `${block}__user-section` }>
-                            <Account
-                                loading={ inProgress }
-                                userData={ selfInfo }
-                                possibleVotes={ listInfo && listInfo.possibleVotes }
-                                refresh={ this._refresh.bind(this) } />
-                        </div>
-                    </div>
+                    <Account
+                        loading={ inProgress }
+                        userData={ selfInfo }
+                        possibleVotes={ listInfo && listInfo.possibleVotes }
+                        refresh={ this._refresh.bind(this) } />
+                </div>
+                <p className={ `${block}__description` }>
+                    This mini-application allows you to browse and vote on new features for webpack. Log in with
+                    your GitHub credentials and you will notice that you have a certain amount of points/influence
+                    that can be used to vote for or against any of the features listed below. The following two
+                    sections describe the different types of influence and how they can be attained.
+                </p>
+                <div className={ `${block}__influences` }>
+                    <Influence 
+                        className={ `${block}__influence-section` } 
+                        type="normal" />
+                    <Influence 
+                        className={ `${block}__influence-section`} 
+                        type="golden" />
                 </div>
 
                 { listInfo && (
-                    <div>
-                        <h1>{ listInfo.displayName }</h1>
-                        <div>{ listInfo.description }</div>
-
-                        <ul className={ `${block}__topics` }>
-                            { listInfo.items.map(topic => (
-                                <li key={ topic.id }>
-                                    <Topic
-                                        user={ selfInfo }
-                                        admin={ listInfo.isAdmin }
-                                        topic={ topic }
-                                        votes={ listInfo.possibleVotes }
-                                        onVote={ this._vote.bind(this) }
-                                        onChangeSettings={ this._changeTopicSettings.bind(this) } />
-                                </li>
-                            ))}
-                        </ul>
-                    </div> 
+                    <ul className={ `${block}__topics` }>
+                        { listInfo.items.map(topic => (
+                            <li key={ topic.id }>
+                                <Topic
+                                    user={ selfInfo }
+                                    admin={ listInfo.isAdmin }
+                                    topic={ topic }
+                                    votes={ listInfo.possibleVotes }
+                                    onVote={ this._vote.bind(this) }
+                                    onChangeSettings={ this._changeTopicSettings.bind(this) } />
+                            </li>
+                        ))}
+                    </ul>
                 )}
 
                 { listInfo && listInfo.isAdmin && (
