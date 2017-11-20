@@ -28,15 +28,22 @@ let lists = {
             { 
                 id: '1234', 
                 list: 'todo', 
-                title: 'Finish up MVP documentation', 
-                description: 'Take care for the remaining issues in the webpack.js.org repo which are relevant for the MVP.', 
+                title: 'Some Feature', 
+                description: 'Mauris et sem a risus pharetra suscipit. Fusce gravida purus non nisi pulvinar, non lobortis tortor vehicula. Mauris at dui a ex vestibulum condimentum id sit amet nisl. Nam finibus ornare laoreet. Duis ultrices sollicitudin quam eu vulputate. Sed ac ante odio. Mauris fermentum vel tortor sit amet iaculis.', 
                 influence: 15 
             },
             { 
                 id: '2345', 
                 list: 'todo', 
-                title: 'Review whole documentation', 
-                description: 'Read over **all** of the documentation to find errors.', 
+                title: 'Review Stuff', 
+                description: 'Cras libero libero, elementum eu laoreet nec, convallis sit amet sem. Donec ut diam dignissim, hendrerit ante id, congue felis. In hac habitasse platea dictumst. Donec sit amet tellus et neque auctor consequat. Cras porta finibus turpis, id auctor lectus.', 
+                golden: 20 
+            },
+            { 
+                id: '3456', 
+                list: 'todo', 
+                title: 'Another Feature', 
+                description: 'Curabitur pharetra facilisis mauris. Integer interdum venenatis metus quis dictum. Cras aliquet erat ut risus vestibulum, sed tincidunt enim maximus. Cras tincidunt vulputate ante vitae tincidunt. Cras quis erat eu augue aliquam pretium nec sit amet magna. Etiam nisi nunc, blandit vel hendrerit et, suscipit finibus nunc.', 
                 golden: 20 
             }
         ]
