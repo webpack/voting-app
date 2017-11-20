@@ -1,20 +1,14 @@
 @import 'mixins';
 @import 'functions';
 
-.influence-info {
-  em {
-    font-weight: bolder;
-  }
+.influence {
+    flex: 0 0 50%;
 
-  i {
-    font-style: italic;
-  }
-
-  &__section {
-    padding: 0.5em 0;
-    
-    @include break(medium) {
-      padding: 0 .5em;
+    em {
+        font-weight: bolder;
     }
-  }
+
+    i {
+        font-style: italic;
+    }
 }
