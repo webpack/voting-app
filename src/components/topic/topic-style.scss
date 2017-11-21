@@ -3,77 +3,75 @@
 
 .topic {
     display: flex;
-    flex-direction: column;
-    margin-top: 30px;
-    margin-bottom: 30px;
+    margin-bottom: 24px;
+    font-size: 12.8px;
 
-    @include break(medium){
-        flex-direction: row;
+    &__content,
+    &__vote {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__content {
+        flex: 1 1 auto;
+
+        & [class*="__inner"] {
+            border-width: 0 0 2px 2px;
+        }
     }
 
     &__title {
-        font-size: 16pt;
-        font-weight: bold;
-        margin-right: 10px;
-    }
+        flex: 0 0 auto;
+        font-weight: 600;
+        padding: 0.55em 1em 0.5em;
+        text-transform: uppercase;
+        background: transparentize(getColor(fiord), 0.75);
 
-    &__voting {
-        display: flex;
-        border: 1px solid lightgray;
-        user-select: none;
-        flex-wrap: wrap;
-
-        @include break(medium){
-            flex: 0 0 40%;
-            margin-right: 30px;
-            padding: 0 0 0 20px;
+        &--vote {
+            background: getColor(fiord);
+            text-align: right;
+            font-weight: 400;
+            color: getColor(white);
         }
     }
 
-    &__score {
-        align-self: center;
-        font-size: 20pt;
-        flex: 0 0 100%;
-        text-align: center;
+    &__inner {
+        flex: 1 1 auto;
+        border: 2px solid transparentize(getColor(fiord), 0.75);
+        border-width: 0 2px 2px 2px;
+    }
 
-        @include break(medium){
-            flex: 0 0 20%;
-            text-align: left;
-        }
+    &__description {
+        padding: 1em;
+        line-height: 1.5;
+    }
+
+    &__sponsors {
+        padding: 1em 1em 0;
     }
 
     &__vote {
-        align-self: center;
-        flex: 0 0 50%;
-
-        @include break(medium){
-            flex: 0 0 40%;
-        }
+        flex: 0 0 250px;
     }
 
-    // TODO: See note in account-style re shared styles
-
-    &__vote-influence {
-        color: blue;
-
-        &:before {
-            content: "◆\2009";
-        }
+    &__vote [class*="__inner"] {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
     }
 
-    &__vote-golden {
-        color: #bfa203;
-
-        &:before {
-            content: "◇\2009";
-        }
+    &__field,
+    &__total {
+        font-size: 24px;
+        text-align: right;
+        padding: 0.25em 16px;
     }
 
-    &__vote-support {
-        color: green;
+    &__field {
 
-        &:before {
-            content: "$\2009";
-        }
+    }
+
+    &__total {
+        border-top: 2px solid transparentize(getColor(fiord), 0.75);
     }
 }
