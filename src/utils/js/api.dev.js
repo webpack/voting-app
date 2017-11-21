@@ -20,7 +20,7 @@ let lists = {
             {
                 name: 'golden',
                 currency: 'goldenInfluence',
-                score: 1,
+                score: 100,
                 color: '#bfa203'
             }
         ],
