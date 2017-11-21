@@ -1,0 +1,13 @@
+@import 'functions';
+
+.currency-icon {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 100%;
+    background: lightgrey;
+
+    &--influence { background: getColor(denim); }
+    &--goldenInfluence { background: #f9bf3b; }
+    &--support { background: green; }
+}
