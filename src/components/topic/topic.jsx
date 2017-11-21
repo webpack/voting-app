@@ -1,5 +1,5 @@
 import React from 'react';
-import VoteButton from 'Components/button/button';
+import Votes from 'Components/votes/votes';
 import './topic-style';
 
 // Specify BEM block name
@@ -84,31 +84,19 @@ export default class Topic extends React.Component {
                         Place Your Vote
                     </div>
                     <div className={ `${block}__inner` }>
-                        { votes.map((settings, i) => {
-                            let { minimum = 0, maximum = 1000 } = settings,
-                                vote = topic.votes[i],
-                                userVote = topic.userVotes ? topic.userVotes[i] : null,
-                                currency = user ? user.currencies.find(currency => currency.name === settings.currency) : null,
-                                value = (userVote && userVote.votes) ? userVote.votes : 0;
-
-                            if (currency && currency.remaining + value < maximum) {
-                                maximum = currency.remaining + value;
-                            }
-
-                            return (
-                                <div key={ settings.name } className={ `${block}__field` }>
-                                    <VoteButton
-                                        className={ `${block}__field` }
-                                        value={ vote.votes }
-                                        myValue={ value }
-                                        maxUp={ userVote ? maximum - value : 0 }
-                                        maxDown={ userVote ? value - minimum : 0 }
-                                        color={ this._getInfluenceColor(settings.name) }
-                                        canVote = { !!user && !topic.locked }
-                                        onVote={ this._vote.bind(this, settings) } />
-                                </div>
-                            );
-                        })}
+                        { votes.map((currency, i) => (
+                            <Votes
+                                key={ currency.name }
+                                className={ `${block}__field` }
+                                currency={ currency }
+                                current={ topic.votes.find(obj => obj.name === currency.name) }
+                                locked={ topic.locked }
+                                user={{
+                                    votes: topic.userVotes && topic.userVotes.find(obj => obj.name === currency.name),
+                                    currency: user && user.currencies.find(obj => obj.name === currency.currency)
+                                }}
+                                onVote={ this._vote.bind(this, currency) } />
+                        ))}
                         <div className={ `${block}__total` }>
                             { topic.score }
                         </div>
@@ -121,21 +109,6 @@ export default class Topic extends React.Component {
                 ) : null }*/}
             </div>
         );
-    }
-
-    /**
-     * Get color for the given influence [name]
-     * 
-     * @param {string} name - Infuence type
-     * @return {string} - A valid CSS color value
-     */
-    _getInfluenceColor(name) {
-        switch (name) {
-            case 'influence': return 'blue';
-            case 'golden': return '#bfa203';
-            case 'thumb': return '#535353';
-            default: return undefined;
-        }
     }
 
     /**

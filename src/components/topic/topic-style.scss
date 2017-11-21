@@ -63,15 +63,22 @@
     &__field,
     &__total {
         font-size: 24px;
-        text-align: right;
-        padding: 0.25em 16px;
     }
 
     &__field {
+        justify-content: flex-end;
+        padding: 0 16px;
+        margin-bottom: 0.5em;
 
+        &:first-child:after {
+            content: '+';
+            margin-left: 12px;
+        }
     }
 
     &__total {
+        padding: 0.25em 16px;
+        text-align: right;
         border-top: 2px solid transparentize(getColor(fiord), 0.75);
     }
 }
