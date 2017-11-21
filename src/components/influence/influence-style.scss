@@ -2,13 +2,12 @@
 @import 'functions';
 
 .influence {
-    flex: 0 0 50%;
+    flex: 1 1 50%;
 
-    em {
-        font-weight: bolder;
-    }
+    em { font-weight: bolder; }
+    i { font-style: italic; }
 
-    i {
-        font-style: italic;
+    &:first-child {
+        margin-right: 1em;
     }
 }
