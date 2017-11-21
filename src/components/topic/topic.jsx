@@ -17,99 +17,108 @@ export default class Topic extends React.Component {
     }
     
     render() {
-        let { user, admin, topic, votes, token } = this.props;
+        let { user, admin, topic, votes, token } = this.props,
+            { editable, title, description } = this.state;
 
         return (
             <div className={ block }>
-                <div className={ `${block}__voting` }>
-                    <div className={ `${block}__score` }>
-                        { topic.score }
-                    </div>
-
-                    { votes.map((settings, i) => {
-                        let { minimum = 0, maximum = 1000 } = settings,
-                            vote = topic.votes[i],
-                            userVote = topic.userVotes[i],
-                            currency = user.currencies.find(currency => currency.name === settings.currency),
-                            value = (userVote && userVote.votes) ? userVote.votes : 0;
-
-                        if (currency && currency.remaining + value < maximum) {
-                            maximum = currency.remaining + value;
-                        }
-
-                        return (
-                            <div key={ settings.name } className={ `${block}__vote` }>
-                                <VoteButton
-                                    className={ `${block}__vote-${settings.name}` }
-                                    value={ vote.votes }
-                                    myValue={ value }
-                                    maxUp={ userVote ? maximum - value : 0 }
-                                    maxDown={ userVote ? value - minimum : 0 }
-                                    color={ this._getInfluenceColor(settings.name) }
-                                    canVote = { !!user && !topic.locked }
-                                    onVote={ this._vote.bind(this, settings) } />
-                            </div>
-                        );
-                    })}
-                </div>
-
-                <div className={ `${block}__content` }>
-                    <span className={ `${block}__title` }>
-                        { !this.state.editable ? topic.title : (
+                <section className={ `${block}__content` }>
+                    <div className={ `${block}__title` }>
+                        { !editable ? title : (
                             <input 
                                 type="text" 
-                                value={ this.state.title } 
+                                value={ title } 
                                 onChange={ this._changeTitle.bind(this) } />
                         )}
-                    </span>
+                        {/* admin ? (
+                            // TODO: Separate component to handle dropdown and state?
+                            <div className={ `${block}__settings` }>
+                                <button onClick={ 
+                                    this._changeSettings.bind(this, { locked: true }) 
+                                }>
+                                    Lock
+                                </button>
 
-                    <span className={ `${block}__description` }>
-                        { !this.state.editable ? topic.description : (
-                            <textarea 
-                                value={ this.state.description } 
-                                onChange={ this._changeDescription.bind(this) } />
-                        )}
-                    </span>
+                                <button onClick={
+                                    this._changeSettings.bind(this, { locked: false })
+                                }>
+                                    Unlock
+                                </button>
 
-                    { this.state.editable ? (
-                        <button onClick={ this._saveChanges.bind(this) }>
-                            Done Editing
-                        </button>
-                    ) : null }
+                                <button onClick={
+                                    this._changeSettings.bind(this, { archived: true })
+                                }>
+                                    Archive
+                                </button>
 
-                    { admin ? (
-                        // TODO: Separate component to handle dropdown and state?
-                        <div className={ `${block}__settings` }>
-                            <button onClick={ 
-                                this._changeSettings.bind(this, { locked: true }) 
-                            }>
-                                Lock
-                            </button>
+                                <button onClick={
+                                    this._changeSettings.bind(this, { archived: false })
+                                }>
+                                    Unarchive
+                                </button>
 
-                            <button onClick={
-                                this._changeSettings.bind(this, { locked: false })
-                            }>
-                                Unlock
-                            </button>
+                                <button onClick={ this._edit.bind(this) }>
+                                    Edit
+                                </button>
+                            </div> 
+                        ) : null */}
+                    </div>
+                    <div className={ `${block}__inner` }>
+                        <div className={ `${block}__description` }>
+                            { !editable ? description : (
+                                <textarea 
+                                    value={ description } 
+                                    onChange={ this._changeDescription.bind(this) } />
+                            )}
+                        </div>
 
-                            <button onClick={
-                                this._changeSettings.bind(this, { archived: true })
-                            }>
-                                Archive
-                            </button>
+                        <div className={ `${block}__sponsors` }>
+                            <div><b>Sponsors</b></div>
+                            <p>Coming soon...</p>
+                        </div>
+                    </div>
+                </section>
 
-                            <button onClick={
-                                this._changeSettings.bind(this, { archived: false })
-                            }>
-                                Unarchive
-                            </button>
+                <section className={ `${block}__vote` }>
+                    <div className={ `${block}__title ${block}__title--vote` }>
+                        Place Your Vote
+                    </div>
+                    <div className={ `${block}__inner` }>
+                        { votes.map((settings, i) => {
+                            let { minimum = 0, maximum = 1000 } = settings,
+                                vote = topic.votes[i],
+                                userVote = topic.userVotes ? topic.userVotes[i] : null,
+                                currency = user ? user.currencies.find(currency => currency.name === settings.currency) : null,
+                                value = (userVote && userVote.votes) ? userVote.votes : 0;
 
-                            <button onClick={ this._edit.bind(this) }>
-                                Edit
-                            </button>
-                        </div> 
-                    ) : null }
-                </div>
+                            if (currency && currency.remaining + value < maximum) {
+                                maximum = currency.remaining + value;
+                            }
+
+                            return (
+                                <div key={ settings.name } className={ `${block}__field` }>
+                                    <VoteButton
+                                        className={ `${block}__field` }
+                                        value={ vote.votes }
+                                        myValue={ value }
+                                        maxUp={ userVote ? maximum - value : 0 }
+                                        maxDown={ userVote ? value - minimum : 0 }
+                                        color={ this._getInfluenceColor(settings.name) }
+                                        canVote = { !!user && !topic.locked }
+                                        onVote={ this._vote.bind(this, settings) } />
+                                </div>
+                            );
+                        })}
+                        <div className={ `${block}__total` }>
+                            { topic.score }
+                        </div>
+                    </div>
+                </section>
+                {/* editable ? (
+                    <button onClick={ this._saveChanges.bind(this) }>
+                        Done Editing
+                    </button>
+                ) : null }*/}
             </div>
         );
     }
@@ -201,12 +210,12 @@ export default class Topic extends React.Component {
         let { title, description } = this.state;
 
         // TODO: This is one approach using promises
-        this.props.save(title, description)
-            .then(success => {
-                this.setState({
-                    editable: false
-                });
-            });
+        this.props
+            .save(title, description)
+            .then(success => this.setState({
+                editable: false
+            }));
+
         // this.setState({
         //     editItem: null,
         //     isCreating: true
