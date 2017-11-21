@@ -4,6 +4,10 @@ import './currency-icon-style';
 // Specify BEM block name
 const block = 'currency-icon';
 
-export default props => (
-    <span className={ `${block} ${block}--${props.type}` } />
+export default ({
+    type,
+    size = 'small',
+    ...props
+}) => (
+    <span className={ `${block} ${block}--${type} ${block}--${size}` } />
 );

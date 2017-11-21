@@ -10,4 +10,14 @@
     &--influence { background: getColor(denim); }
     &--goldenInfluence { background: #f9bf3b; }
     &--support { background: green; }
+
+    &--large {
+        width: 16px;
+        height: 16px;
+    }
+
+    &--huge {
+        width: 19px;
+        height: 19px;
+    }
 }
