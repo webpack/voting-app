@@ -1,93 +1,117 @@
 @import 'functions';
 
 .account {
-    &__inner {
-        margin-top: 10px;
-    }
+    flex: 0 0 auto;
+    position: relative;
 
     &__login {
-        margin: 20px 0;
+        display: flex;
+        border: none;
+        outline: none;
+        color: getColor(white);
+        background: getColor(elephant);
+        padding: 5px 10px 5px 10px;
+        border-radius: 5px;
+        font-size: 13px;
+        cursor: pointer;
+        align-items: center;
 
-        button {
-            border: none;
-            outline: none;
-            color: getColor(white);
-            background: getColor(elephant);
-            padding: 5px 10px 5px 10px;
-            border-radius: 2px;
-            font-size: 13px;
-            cursor: pointer;
+        &:hover {
+            background: black;
+        }
 
-            &:hover {
-                background: black;
-            }
-
-            &:active {
-                background: getColor(elephant)
-            }
+        &:active {
+            background: getColor(elephant)
         }
 
         img {
-            height: 25px;
-            vertical-align: middle;
+            height: 20px;
             padding-left: 5px;
         }
     }
 
-    &__info {
-        outline: none;
-        border: none;
-        background: getColor(elephant);
-        color: white;
-        border-radius: 3px;
-        font-size: 13px;
-        display: inline-block;
-        padding: 3px 10px;
+    &__inner {
+        display: flex;
+    }
 
-        img {
-            height: 25px;
-            vertical-align: middle;
-            margin-right: 10px;
+    &__info {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        font-size: 12.8px;
+        margin-right: 0.5em;
+        justify-content: space-around;
+        text-align: right;
+    }
+
+    &__title {
+        font-weight: 600;
+    }
+
+    &__separator {
+        margin: 0 0.5em;
+        color: getColor(alto);
+    }
+
+    &__currency {
+        margin-left: 1em;
+        cursor: help;
+
+        & :last-child {
+            margin-left: 0.5em;
         }
     }
 
-    &__currencies {
-        padding: 0;
+    &__avatar {
+        flex: 0 0 auto;
+        height: 35px;
+        border-radius: 100%;
+        cursor: pointer;
+        background: whitesmoke;
+        transition: background 250ms;
 
-        & > li {
-            display: inline-block;
-            padding: 5px;
+        &:hover {
+            background: getColor(alto);
         }
     }
 
     &__options {
-        margin: 5px 0;
-    }
+        position: absolute;
+        width: 100px;
+        top: calc(100% + 12px);
+        right: 0;
+        box-shadow: 0 1px 2px getColor(grey);
+        border-radius: 3px;
+        background: getColor(concrete);
 
-    // TODO: These currency styles used to be shared between here and list items
-    // Maybe use a mixin instead?
-
-    &__currency-influence {
-        color: blue;
-
-        &:before {
-            content: "◆\2009";
+        &:after {
+            content: '';
+            position: absolute;
+            top: -8px;
+            right: 10px;
+            border-left: 8px solid transparent;
+            border-bottom: 8px solid getColor(concrete);
+            border-right: 8px solid transparent;
         }
     }
 
-    &__currency-goldenInfluence {
-        color: #bfa203;
+    &__option {
+        display: block;
+        width: 100%;
+        font-size: 12.8px;
+        padding: 0.25em 1em;
+        border: none;
+        outline: none;
+        text-align: right;
+        background: transparent;
+        transition: background 250ms;
 
-        &:before {
-            content: "◇\2009";
+        &:not(:last-child) {
+            border-bottom: 1px solid getColor(alto);
         }
-    }
 
-    &__currency-support {
-        color: green;
-
-        &:before {
-            content: "$\2009";
+        &:hover {
+            background: getColor(alto);
         }
     }
 }
