@@ -75,7 +75,6 @@ export default class Account extends React.Component {
      */
     _login() {
         let { location = '' } = window;
-
         StartLogin(location);
     }
 
