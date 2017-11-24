@@ -63,52 +63,18 @@
     }
 
     &__avatar {
-        flex: 0 0 auto;
+        display: inline-block;
+        width: 35px;
         height: 35px;
         border-radius: 100%;
+        font-size: 12.8px;
+        line-height: 2.75;
+        text-align: center;
+        text-overflow: ellipsis;
         cursor: pointer;
         background: whitesmoke;
+        overflow: hidden;
         transition: background 250ms;
-
-        &:hover {
-            background: getColor(alto);
-        }
-    }
-
-    &__options {
-        position: absolute;
-        width: 100px;
-        top: calc(100% + 12px);
-        right: 0;
-        box-shadow: 0 1px 2px getColor(grey);
-        border-radius: 3px;
-        background: getColor(concrete);
-
-        &:after {
-            content: '';
-            position: absolute;
-            top: -8px;
-            right: 10px;
-            border-left: 8px solid transparent;
-            border-bottom: 8px solid getColor(concrete);
-            border-right: 8px solid transparent;
-        }
-    }
-
-    &__option {
-        display: block;
-        width: 100%;
-        font-size: 12.8px;
-        padding: 0.25em 1em;
-        border: none;
-        outline: none;
-        text-align: right;
-        background: transparent;
-        transition: background 250ms;
-
-        &:not(:last-child) {
-            border-bottom: 1px solid getColor(alto);
-        }
 
         &:hover {
             background: getColor(alto);
