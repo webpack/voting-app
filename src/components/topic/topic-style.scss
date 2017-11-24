@@ -35,6 +35,10 @@
         }
     }
 
+    &__settings {
+        float: right;
+    }
+
     &__inner {
         flex: 1 1 auto;
         border: 2px solid transparentize(getColor(fiord), 0.75);
