@@ -1,5 +1,6 @@
 import React from 'react';
 import CurrencyIcon from 'Components/currency-icon/currency-icon';
+import Dropdown from 'Components/dropdown/dropdown';
 import GithubLogo from './github-logo.svg';
 import { startLogin as StartLogin } from 'Utils/js/api';
 import './account-style';
@@ -8,14 +9,6 @@ import './account-style';
 const block = 'account';
 
 export default class Account extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            options: false
-        };
-    }
-
     render() {
         let { userData, possibleVotes = [], loading } = this.props,
             { currencies = [] } = userData || {};
@@ -58,26 +51,18 @@ export default class Account extends React.Component {
                             </div>
                         </div>
 
-                        <img 
-                            className={ `${block}__avatar` }
-                            alt={ userData.login }
-                            src={ userData.avatar }
-                            onClick={ this._toggleOptions.bind(this) } />
-
-                        { this.state.options ? (
-                            <div className={ `${block}__options` }>
-                                <button
-                                    className={ `${block}__option` }
-                                    onClick={ this.props.refresh }>
-                                    Refresh
-                                </button>
-                                <button
-                                    className={ `${block}__option` }
-                                    onClick={ this._logout.bind(this) }>
-                                    Logout
-                                </button>
-                            </div>
-                        ) : null }
+                        <Dropdown
+                            width={ 100 }
+                            tipOffset={ 12 }
+                            options={[
+                                { label: 'Refresh', onClick: this.props.refresh },
+                                { label: 'Logout', onClick: this._logout.bind(this) }
+                            ]}>
+                            <img 
+                                className={ `${block}__avatar` }
+                                alt={ userData.login }
+                                src={ userData.avatar } />
+                        </Dropdown>
                     </div>
                 )}
             </div>
@@ -101,15 +86,5 @@ export default class Account extends React.Component {
     _logout() {
         delete window.localStorage.voteAppToken;
         window.location.reload();
-    }
-
-    /**
-     * Display and hide the options menu
-     * 
-     */
-    _toggleOptions() {
-        this.setState({
-            options: !this.state.options
-        });
     }
 }
