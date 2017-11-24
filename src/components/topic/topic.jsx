@@ -1,5 +1,6 @@
 import React from 'react';
 import Votes from 'Components/votes/votes';
+import Dropdown from 'Components/dropdown/dropdown';
 import './topic-style';
 
 // Specify BEM block name
@@ -30,38 +31,22 @@ export default class Topic extends React.Component {
                                 value={ title } 
                                 onChange={ this._changeTitle.bind(this) } />
                         )}
-                        {/* admin ? (
-                            // TODO: Separate component to handle dropdown and state?
-                            <div className={ `${block}__settings` }>
-                                <button onClick={ 
-                                    this._changeSettings.bind(this, { locked: true }) 
-                                }>
-                                    Lock
-                                </button>
 
-                                <button onClick={
-                                    this._changeSettings.bind(this, { locked: false })
-                                }>
-                                    Unlock
-                                </button>
-
-                                <button onClick={
-                                    this._changeSettings.bind(this, { archived: true })
-                                }>
-                                    Archive
-                                </button>
-
-                                <button onClick={
-                                    this._changeSettings.bind(this, { archived: false })
-                                }>
-                                    Unarchive
-                                </button>
-
-                                <button onClick={ this._edit.bind(this) }>
-                                    Edit
-                                </button>
-                            </div> 
-                        ) : null */}
+                        { admin ? (
+                            <Dropdown
+                                className={ `${block}__settings` }
+                                width={ 125 }
+                                onChange={ this._changeSettings }
+                                options={[
+                                    { label: 'Lock Topic', locked: true },
+                                    { label: 'Unlock Topic', locked: false },
+                                    { label: 'Archive Topic', archived: true },
+                                    { label: 'Revive Topic', archived: false },
+                                    { label: 'Edit Topic', onClick: this._edit.bind(this) }
+                                ]}>
+                                +
+                            </Dropdown>
+                        ) : null }
                     </div>
                     <div className={ `${block}__inner` }>
                         <div className={ `${block}__description` }>
