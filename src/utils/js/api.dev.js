@@ -53,6 +53,7 @@ let lists = {
 let allItems = {
     '1234': lists.todo.items[0],
     '2345': lists.todo.items[1],
+    '3456': lists.todo.items[2]
 };
 
 function delay(time) {
