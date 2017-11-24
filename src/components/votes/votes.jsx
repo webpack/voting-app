@@ -7,12 +7,7 @@ const block = 'votes';
 
 export default class Votes extends React.Component {
     render() {
-        let { className = '', currency, current, locked, user } = this.props,
-            { maximum = 1000 } = currency;
-
-        if ( user.currency && user.currency.remaining + user.votes.votes < maximum ) {
-            maximum = user.currency.remaining + user.votes.votes;
-        }
+        let { className = '', currency, current, locked, user } = this.props;
         
         return (
             <div className={ `${block} ${className}` }>
@@ -20,7 +15,7 @@ export default class Votes extends React.Component {
                     { !locked && user.currency && (
                         <figure
                             className={ `${block}__up` }
-                            onClick={ () => this._handleClick(1) }
+                            onClick={ () => this._vote(1) }
                             onMouseDown={ () => this._startCounter(true) }
                             onMouseUp={ () => this._stopCounter() }
                             onMouseOut={ () => this._stopCounter() }
@@ -36,7 +31,7 @@ export default class Votes extends React.Component {
                     { !locked && user.currency && (
                         <figure
                             className={ `${block}__down` }
-                            onClick={ () => this._handleClick(-1) }
+                            onClick={ () => this._vote(-1) }
                             onMouseDown={ () => this._startCounter(false) }
                             onMouseUp={ () => this._stopCounter() }
                             onMouseOut={ () => this._stopCounter() }
@@ -55,64 +50,91 @@ export default class Votes extends React.Component {
             </div>
         );
     }
+
+    /**
+     * Computes the maximum amount of votes that can be used
+     * 
+     * @return {number} - The maximum number of votes allowed
+     */
+    get _maximum() {
+        let { user, currency } = this.props,
+            { maximum = 1000 } = currency;
+
+        if ( user.currency && (user.currency.remaining + user.votes.votes) < maximum ) {
+            return user.currency.remaining + user.votes.votes;
+
+        } else return maximum;
+    }
     
-    _handleClick(n) {
-        let { maxUp, maxDown } = this.props;
+    /**
+     * Trigger a new `number` of votes to be added
+     * 
+     * @param {number} number - The number of votes to use
+     */
+    _vote(number) {
+        let { user } = this.props,
+            { votes } = user.votes,
+            limit = this._maximum - votes;
 
         this.props.onVote(
             Math.min(
-                maxUp, 
-                Math.max(n, -maxDown)
+                limit, 
+                Math.max(number, -votes)
             )
         );
     }
 
+    /**
+     * Continually increase or decrease the vote with a dynamic change
+     * based on how the long the button has been held
+     * 
+     * @param {boolean} increase - Indicates whether to increase or decrease
+     */
     _startCounter(increase) {
         let current = 0;
-        let add = 0;
+        let change = 0;
 
-        if (this.interval) {
-            clearInterval(this.interval);
+        if (this._interval) {
+            clearInterval(this._interval);
         }
 
-        this.interval = setInterval(() => {
-            // increase for 1 between 0 and 5
-            if(current <= 5) {
+        this._interval = setInterval(() => {
+            if ( current <= 5 ) {
                 current++;
-                add = 1;
-            }
-            // increase for 2 between 6 and 10
-            else if(current <= 10) {
+                change = 1;
+
+            } else if ( current <= 10 ) {
                 current += 2;
-                add = 2;
-            }
-            // increase for 5 between 11 and 40
-            else if(current <= 40) {
+                change = 2;
+
+            } else if ( current <= 40 ) {
                 current += 5;
-                add = 5;
-            }
-            // increase for 10 between 41 and 70
-            else if(current <= 70) {
+                change = 5;
+
+            } else if ( current <= 70 ) {
                 current += 10;
-                add = 10;
-            }
-            // increase for 15 after 71
-            else {
+                change = 10;
+
+            } else {
                 current += 15;
-                add = 15;
+                change = 15;
             }
 
-            if(!increase) {
-                add *= -1;
+            if ( !increase ) {
+                change *= -1;
             }
 
-            this._handleClick(add);
+            this._vote(change);
         }, 200);
     }
 
+    /**
+     * Stop the continual increase or decrease interval
+     * 
+     */
     _stopCounter() {
-        if (this.interval) {
-            clearInterval(this.interval);
+        if (this._interval) {
+            clearInterval(this._interval);
         }
     }
 }
