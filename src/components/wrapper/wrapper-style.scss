@@ -23,4 +23,19 @@
         padding: 0;
         list-style: none;
     }
+
+    &__new {
+        text-align: center;
+    }
+
+    &__add {
+        font-size: 14px;
+        color: getColor(denim);
+        cursor: pointer;
+        transition: color 250ms;
+
+        &:hover {
+            color: getColor(fiord);
+        }
+    }
 }

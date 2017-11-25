@@ -1,4 +1,5 @@
 import React from 'react';
+import UUID from 'uuid/v4';
 import * as api from 'Utils/js/api';
 import Influence from 'Components/influence/influence';
 import Account from 'Components/account/account';
@@ -20,44 +21,16 @@ export default class Wrapper extends React.Component {
             listInfo: undefined,
             isFetchingSelf: false,
             isFetchingList: false,
-            isCreating: false,
             isLoginActive: false,
-            isVoting: 0
+            isVoting: 0,
+            newTopics: []
         };
     }
 
-    componentDidMount() {
-        let { selfInfo, listInfo } = this.state;
-
-        if ( !this._supportedBrowser ) return;
-
-        if ( api.isLoginActive() ) {
-            this.setState({
-                isLoginActive: true
-            });
-
-            api.continueLogin().then(token => {
-                window.localStorage.voteAppToken = token;
-            });
-
-        } else {
-            if (!selfInfo) this._updateUser();
-            if (!listInfo) this._updateList();
-        }
-    }
-
-    componentWillReceiveProps(props) {
-        if ( !this._supportedBrowser ) return;
-
-        this._updateList(props);
-    }
-
     render() {
-        let { isVoting, isFetchingList, isFetchingSelf, isCreating, isLoginActive } = this.state,
+        let { isVoting, isFetchingList, isFetchingSelf, isLoginActive } = this.state,
             { selfInfo, listInfo, editItem, editItemTitle, editItemDescription } = this.state,
             maxVoteInfo = listInfo && listInfo.possibleVotes.map(() => 0);
-
-        const inProgress = isFetchingList || isFetchingSelf || isCreating || isVoting;
 
         if ( !this._supportedBrowser ) {
             return <div>Your browser is not supported.</div>;
@@ -85,7 +58,7 @@ export default class Wrapper extends React.Component {
                     </h1>
 
                     <Account
-                        loading={ inProgress }
+                        loading={ isFetchingList || isFetchingSelf || isVoting }
                         userData={ selfInfo }
                         possibleVotes={ listInfo && listInfo.possibleVotes }
                         refresh={ this._refresh.bind(this) } />
@@ -121,11 +94,50 @@ export default class Wrapper extends React.Component {
                     </ul>
                 )}
 
-                { listInfo && listInfo.isAdmin && (
-                    <CreateTopic onCreate={ this._createTopic.bind(this) } />
-                )}
+                { listInfo && listInfo.isAdmin ? (
+                    <div className={ `${block}__new` }>
+                        { this.state.newTopics.map(id => (
+                            <CreateTopic
+                                key={ id }
+                                id={ id }
+                                onCreate={ this._createTopic.bind(this) } />
+                        ))}
+
+                        <a
+                            className={ `${block}__add` }
+                            onClick={ this._addTopic.bind(this) }>
+                            Add a new topic...
+                        </a>
+                    </div>
+                ) : null }
             </div>
         );
+    }
+
+    componentDidMount() {
+        let { selfInfo, listInfo } = this.state;
+
+        if ( !this._supportedBrowser ) return;
+
+        if ( api.isLoginActive() ) {
+            this.setState({
+                isLoginActive: true
+            });
+
+            api.continueLogin().then(token => {
+                window.localStorage.voteAppToken = token;
+            });
+
+        } else {
+            if (!selfInfo) this._updateUser();
+            if (!listInfo) this._updateList();
+        }
+    }
+
+    componentWillReceiveProps(props) {
+        if ( !this._supportedBrowser ) return;
+
+        this._updateList(props);
     }
 
     /**
@@ -181,24 +193,34 @@ export default class Wrapper extends React.Component {
     }
 
     /**
-     * Create a new topic for voting
+     * Add a new editable topic
      * 
+     */
+    _addTopic() {
+        this.setState({
+            newTopics: [
+                ...this.state.newTopics,
+                UUID()
+            ]
+        });
+    }
+
+    /**
+     * Create a new topic for voting
+     *
+     * @param {string} id          - The temporary    
      * @param {string} title       - The topic title
      * @param {string} description - The topic description
      */
-    _createTopic(title = '', description = '') {
+    _createTopic(id, title = '', description = '') {
         let { name } = this.props,
             { listInfo } = this.state,
             { voteAppToken } = localStorage;
 
-        this.setState({
-            isCreating: true
-        });
-
-        api.createItem(voteAppToken, name, title, description)
+        return api.createItem(voteAppToken, name, title, description)
             .then(item => {
                 this.setState({
-                    isCreating: false,
+                    newTopics: this.state.newTopics.filter(uuid => uuid !== id),
                     listInfo: listInfo && {
                         ...listInfo,
                         items: [
@@ -207,6 +229,8 @@ export default class Wrapper extends React.Component {
                         ]
                     }
                 });
+
+                return true;
             });
     }
 
@@ -219,18 +243,8 @@ export default class Wrapper extends React.Component {
     _changeTopicSettings(id, options = {}) {
         let { voteAppToken } = localStorage;
 
-        this.setState({
-            isCreating: true
-        });
-
         return api.configItem(voteAppToken, id, options)
-            .then(() => {
-                this.setState({
-                    isCreating: false
-                });
-
-                this._updateList();
-            });
+            .then(() => this._updateList());
     }
 
     /**

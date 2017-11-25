@@ -85,6 +85,10 @@
         }
     }
 
+    &__save {
+        margin-left: 1em;
+    }
+
     &__sponsors {
         padding: 1em 1em 0;
     }
@@ -97,6 +101,7 @@
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
+        padding-top: 1em;
     }
 
     &__field,

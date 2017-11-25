@@ -12,18 +12,18 @@ export default class Topic extends React.Component {
         super(props);
 
         this.state = {
-            editing: false,
+            editing: props.editing || false,
             title: props.topic.title,
             description: props.topic.description
         };
     }
     
     render() {
-        let { user, admin, topic, votes, token } = this.props,
+        let { className = '', user, admin, topic, votes, token } = this.props,
             { editing, title, description } = this.state;
 
         return (
-            <div className={ block }>
+            <div className={ `${block} ${className}` }>
                 <section className={ `${block}__content` }>
                     <div className={ `${block}__title` }>
                         { !editing ? title : (
@@ -60,7 +60,9 @@ export default class Topic extends React.Component {
                         </div>
 
                         { editing ? (
-                            <button onClick={ this._saveChanges.bind(this) }>
+                            <button
+                                className={ `${block}__save` }
+                                onClick={ this._saveChanges.bind(this) }>
                                 Done Editing
                             </button>
                         ) : null }
@@ -175,8 +177,12 @@ export default class Topic extends React.Component {
 
         this.props
             .onChangeSettings(topic.id, { title, description })
-            .then(success => this.setState({
-                editing: false
-            }));
+            .then(success => {
+                if (success) {
+                    this.setState({
+                        editing: false
+                    });
+                }
+            });
     }
 }
