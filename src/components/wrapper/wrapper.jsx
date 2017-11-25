@@ -223,7 +223,7 @@ export default class Wrapper extends React.Component {
             isCreating: true
         });
 
-        api.configItem(voteAppToken, id, options)
+        return api.configItem(voteAppToken, id, options)
             .then(() => {
                 this.setState({
                     isCreating: false

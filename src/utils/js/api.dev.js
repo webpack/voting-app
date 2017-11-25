@@ -146,6 +146,8 @@ export function getList(token, name) {
                 id: item.id,
                 list: item.list,
                 title: item.title,
+                locked: item.locked || false,
+                archived: item.archived || false,
                 description: item.description,
                 votes,
                 userVotes: loggedIn ? listData.possibleVotes.map(pv => ({
@@ -218,9 +220,7 @@ export function configItem(token, itemId, config) {
         );
 
     } else {
-        Object.keys(config).forEach(key => {
-            item[key] = config[key];
-        });
+        Object.assign(item, config);
         
         return delay(500).then(() => true);
     }
