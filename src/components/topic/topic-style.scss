@@ -20,6 +20,20 @@
         }
     }
 
+    input,
+    textarea {
+        padding: 0;
+        outline: none;
+        border: none;
+        box-shadow: none;
+        font-family: inherit;
+        font-size: inherit;
+        font-weight: inherit;
+        color: inherit;
+        background: transparent;
+        text-transform: inherit;
+    }
+
     &__title {
         flex: 0 0 auto;
         font-weight: 600;
@@ -33,10 +47,25 @@
             font-weight: 400;
             color: getColor(white);
         }
+
+        input {
+            width: 90%;
+        }
     }
 
     &__settings {
         float: right;
+        max-height: 15px;
+        cursor: pointer;
+
+        path {
+            fill: getColor(denim);
+            transition: fill 250ms;
+        }
+
+        &:hover path {
+            fill: getColor(fiord);
+        }
     }
 
     &__inner {
@@ -48,6 +77,12 @@
     &__description {
         padding: 1em;
         line-height: 1.5;
+
+        textarea {
+            width: 100% !important;
+            line-height: 1.5;
+            resize: none;
+        }
     }
 
     &__sponsors {

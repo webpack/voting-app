@@ -49,5 +49,8 @@
     "webpack": "^3.8.1",
     "webpack-dev-server": "^2.4.2",
     "webpack-merge": "^4.1.0"
+  },
+  "dependencies": {
+    "react-textarea-autosize": "^5.2.1"
   }
 }
