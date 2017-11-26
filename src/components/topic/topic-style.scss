@@ -74,7 +74,13 @@
         border-width: 0 2px 2px 2px;
     }
 
+    &__content [class*="__inner"] {
+        display: flex;
+        flex-direction: column;
+    }
+
     &__description {
+        flex: 1 1 auto;
         padding: 1em;
         line-height: 1.5;
 
@@ -86,11 +92,17 @@
     }
 
     &__save {
+        flex: 0 0 auto;
         margin-left: 1em;
     }
 
     &__sponsors {
-        padding: 1em 1em 0;
+        flex: 0 0 auto;
+        padding: 1em;
+    }
+
+    &__people {
+        margin-top: 0.25em;
     }
 
     &__vote {
