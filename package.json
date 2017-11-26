@@ -5,6 +5,7 @@
   "main": "dist/vote.bundle.js",
   "scripts": {
     "start": "webpack-dev-server --config webpack.dev.babel.js --env.dev",
+    "watch": "webpack --config webpack.dist.babel.js --watch",
     "build": "webpack --config webpack.dist.babel.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
