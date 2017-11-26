@@ -4,10 +4,19 @@
 .influence {
     flex: 1 1 50%;
 
-    em { font-weight: bolder; }
-    i { font-style: italic; }
-
     &:first-child {
         margin-right: 1em;
+    }
+
+    &__header {
+        font-size: 1.5em;
+        margin-bottom: 0.25em;
+    }
+
+    &__description {
+        line-height: 1.5;
+        
+        em { font-weight: bolder; }
+        i { font-style: italic; }
     }
 }

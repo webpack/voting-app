@@ -13,10 +13,17 @@
     &__title {
         flex: 1 1 auto;
         margin: 0;
+        font-size: 2em;
+    }
+
+    &__description {
+        margin: 1em 0;
+        line-height: 1.5;
     }
 
     &__influences {
         display: flex;
+        margin-bottom: 1em;
     }
 
     &__topics {
@@ -30,6 +37,7 @@
 
     &__add {
         font-size: 14px;
+        font-weight: 600;
         color: getColor(denim);
         cursor: pointer;
         transition: color 250ms;
