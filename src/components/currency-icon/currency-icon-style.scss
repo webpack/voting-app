@@ -2,22 +2,8 @@
 
 .currency-icon {
     display: inline-block;
-    width: 10px;
-    height: 10px;
-    border-radius: 100%;
-    background: lightgrey;
 
-    &--influence { background: getColor(denim); }
-    &--goldenInfluence { background: #f9bf3b; }
-    &--support { background: green; }
-
-    &--large {
-        width: 16px;
-        height: 16px;
-    }
-
-    &--huge {
-        width: 19px;
-        height: 19px;
-    }
+    &--influence { fill: getColor(denim); }
+    &--goldenInfluence { fill: #f9bf3b; }
+    &--support { fill: green; }
 }
