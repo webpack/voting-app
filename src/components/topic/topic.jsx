@@ -68,8 +68,8 @@ export default class Topic extends React.Component {
                         ) : null }
 
                         <div className={ `${block}__sponsors` }>
-                            <div><b>Sponsors</b></div>
-                            <p>Coming soon...</p>
+                            <h4 className={ `${block}__subtitle` }>Sponsors</h4>
+                            <div className={ `${block}__people` }>Coming soon...</div>
                         </div>
                     </div>
                 </section>
