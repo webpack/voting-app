@@ -34,7 +34,7 @@
         background: transparent;
         transition: background 250ms;
 
-        &:not(:last-child) {
+        &:not(:last-of-type) {
             border-bottom: 1px solid getColor(alto);
         }
 
