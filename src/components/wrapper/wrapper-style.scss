@@ -46,4 +46,24 @@
             color: getColor(fiord);
         }
     }
+
+    @media (max-width: 720px) {
+        & [class*="__top"] {
+            flex-direction: column;
+            align-items: flex-start;
+
+            & .account__info {
+                order: 2;
+                text-align: left;
+            }
+        }
+
+        & [class*="__influences"] {
+            flex-direction: column;
+
+            & .influence {
+                margin-bottom: 1em;
+            }
+        }
+    }
 }
