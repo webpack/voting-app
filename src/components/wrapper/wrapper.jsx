@@ -244,7 +244,8 @@ export default class Wrapper extends React.Component {
         let { voteAppToken } = localStorage;
 
         return api.configItem(voteAppToken, id, options)
-            .then(() => this._updateList());
+            .then(() => this._updateList())
+            .then(() => true);
     }
 
     /**
