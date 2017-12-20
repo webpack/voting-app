@@ -1,6 +1,7 @@
 import React from 'react';
 import UUID from 'uuid/v4';
 import * as api from 'Utils/js/api';
+import 'whatwg-fetch';
 import Influence from 'Components/influence/influence';
 import Account from 'Components/account/account';
 import Topic from 'Components/topic/topic';
