@@ -119,7 +119,7 @@ export function getSelf(token) {
     }
 }
 
-export function getList(token, name) {
+export function getList(token, name = 'todo') {
     const loggedIn = token === 'developer';
     const listData = lists[name];
 
@@ -160,7 +160,7 @@ export function getList(token, name) {
     }));
 }
 
-export function createItem(token, list, title, description) {
+export function createItem(token, list = 'todo', title, description) {
     if (token !== 'developer') {
         return Promise.reject(new Error('Not logged in as developer'));
 

@@ -1,11 +1,12 @@
 import React from 'react';
 import UUID from 'uuid/v4';
-import * as api from 'Utils/js/api';
 import 'whatwg-fetch';
 import Influence from 'Components/influence/influence';
 import Account from 'Components/account/account';
 import Topic from 'Components/topic/topic';
 import CreateTopic from 'Components/create-topic/create-topic';
+import * as api from 'Utils/js/api';
+import * as devapi from 'Utils/js/api.dev';
 import './wrapper-style';
 
 // Specify BEM block name
@@ -15,9 +16,11 @@ export default class Wrapper extends React.Component {
     constructor(props) {
         super(props);
 
+        this._api = props.development ? devapi : api;
         this._supportedBrowser = typeof localStorage === 'object';
 
         this.state = {
+            list: 'todo',
             selfInfo: undefined,
             listInfo: undefined,
             isFetchingSelf: false,
@@ -62,7 +65,8 @@ export default class Wrapper extends React.Component {
                         loading={ isFetchingList || isFetchingSelf || isVoting }
                         userData={ selfInfo }
                         possibleVotes={ listInfo && listInfo.possibleVotes }
-                        refresh={ this._refresh.bind(this) } />
+                        refresh={ this._refresh.bind(this) }
+                        startLogin={ this._api.startLogin } />
                 </div>
                 <p className={ `${block}__description` }>
                     This mini-application allows you to browse and vote on new features for webpack. Log in with
@@ -120,12 +124,12 @@ export default class Wrapper extends React.Component {
 
         if ( !this._supportedBrowser ) return;
 
-        if ( api.isLoginActive() ) {
+        if ( this._api.isLoginActive() ) {
             this.setState({
                 isLoginActive: true
             });
 
-            api.continueLogin().then(token => {
+            this._api.continueLogin().then(token => {
                 window.localStorage.voteAppToken = token;
             });
 
@@ -153,7 +157,8 @@ export default class Wrapper extends React.Component {
                 isFetchingSelf: true
             });
 
-            api.getSelf(voteAppToken)
+            this._api
+                .getSelf(voteAppToken)
                 .then(result => {
                     this.setState({ selfInfo: result });
                 })
@@ -170,17 +175,17 @@ export default class Wrapper extends React.Component {
     /**
      * Fetch the list of voting topics
      * 
-     * @param {object} props - The props to use
      */
-    _updateList(props = this.props) {
-        let { name } = props,
+    _updateList() {
+        let { list } = this.state,
             { voteAppToken } = localStorage;
 
         this.setState({
             isFetchingList: true
         });
 
-        api.getList(voteAppToken, name)
+        this._api
+            .getList(voteAppToken, list)
             .then(result => {
                 this.setState({ listInfo: result });
             })
@@ -214,25 +219,25 @@ export default class Wrapper extends React.Component {
      * @param {string} description - The topic description
      */
     _createTopic(id, title = '', description = '') {
-        let { name } = this.props,
-            { listInfo } = this.state,
+        let { list, listInfo } = this.state,
             { voteAppToken } = localStorage;
 
-        return api.createItem(voteAppToken, name, title, description)
-            .then(item => {
-                this.setState({
-                    newTopics: this.state.newTopics.filter(uuid => uuid !== id),
-                    listInfo: listInfo && {
-                        ...listInfo,
-                        items: [
-                            ...listInfo.items,
-                            item
-                        ]
-                    }
-                });
+        return this._api
+                .createItem(voteAppToken, list, title, description)
+                .then(item => {
+                    this.setState({
+                        newTopics: this.state.newTopics.filter(uuid => uuid !== id),
+                        listInfo: listInfo && {
+                            ...listInfo,
+                            items: [
+                                ...listInfo.items,
+                                item
+                            ]
+                        }
+                    });
 
-                return true;
-            });
+                    return true;
+                });
     }
 
     /**
@@ -244,9 +249,10 @@ export default class Wrapper extends React.Component {
     _changeTopicSettings(id, options = {}) {
         let { voteAppToken } = localStorage;
 
-        return api.configItem(voteAppToken, id, options)
-            .then(() => this._updateList())
-            .then(() => true);
+        return this._api
+                .configItem(voteAppToken, id, options)
+                .then(() => this._updateList())
+                .then(() => true);
     }
 
     /**
@@ -274,7 +280,8 @@ export default class Wrapper extends React.Component {
 
         this._localVote(id, influence, difference, currency, score);
 
-        api.vote(voteAppToken, id, influence, difference)
+        this._api
+            .vote(voteAppToken, id, influence, difference)
             .catch(e => {
                 console.error(e);
 
