@@ -1,20 +1,5 @@
-import {
-    isLoginActive as devIsLoginActive,
-    startLogin as devStartLogin,
-    continueLogin as devContinueLogin,
-    getSelf as devGetSelf,
-    getList as devGetList,
-    createItem as devCreateItem,
-    vote as devVote,
-    configItem as devConfigItem
-} from './api.dev';
-
 const API_URL = 'https://oswils44oj.execute-api.us-east-1.amazonaws.com/production/';
 const GITHUB_CLIENT_ID = '4d355e2799cb8926c665';
-const PRODUCTION_HOST = 'webpack.js.org';
-
-// You can test the production mode with a host entry,
-// or by setting PRODUCTION_HOST to "localhost:3000" and stealing localStorage.voteAppToken from the production side.
 
 function checkResult(result) {
     if ( !result ) throw new Error('No result received');
@@ -24,21 +9,20 @@ function checkResult(result) {
 }
 
 export function isLoginActive() {
-    if ( window.location.host !== PRODUCTION_HOST ) {
-        return devIsLoginActive();
-
-    } else return /^\?code=([^&]*)&state=([^&]*)/.test(window.location.search);
+    return /^\?code=([^&]*)&state=([^&]*)/.test(window.location.search);
 }
 
 export function startLogin(callbackUrl) {
     let state = '' + Math.random();
 
-    if (window.location.host !== PRODUCTION_HOST) {
-        return devStartLogin(callbackUrl);
-    }
+    if ( callbackUrl.includes('webpack.js.org') ) {
+        window.localStorage.githubState = state;
+        window.location = 'https://github.com/login/oauth/authorize?client_id=' + GITHUB_CLIENT_ID + '&scope=user:email&state=' + state + '&allow_signup=false&redirect_uri=' + encodeURIComponent(callbackUrl);
 
-    window.localStorage.githubState = state;
-    window.location = 'https://github.com/login/oauth/authorize?client_id=' + GITHUB_CLIENT_ID + '&scope=user:email&state=' + state + '&allow_signup=false&redirect_uri=' + encodeURIComponent(callbackUrl);
+    } else alert(
+        'You can\'t login with GitHub OAuth on localhost. Please pass the ' +
+        '`development` prop to the `Wrapper` in order to use `api.dev`.'
+    );
 
     return Promise.resolve();
 }
@@ -46,10 +30,7 @@ export function startLogin(callbackUrl) {
 export function continueLogin() {
     const match = /^\?code=([^&]*)&state=([^&]*)/.exec(window.location.search);
 
-    if ( window.location.host !== PRODUCTION_HOST ) {
-        return devContinueLogin();
-
-    } else if (match) {
+    if ( match ) {
         return login(match[1], match[2]).then(result => {
             setTimeout(() => {
                 let href = window.location.href;
@@ -90,86 +71,61 @@ function login(code, state) {
 }
 
 export function getSelf(token) {
-    if (window.location.host !== PRODUCTION_HOST) {
-        return devGetSelf(token);
-
-    } else {
-        return fetch(`${API_URL}/self?token=${token}`, {
-                mode: 'cors'
-            })
-            .then((res) => res.json())
-            .then(checkResult);
-    }
+    return fetch(`${API_URL}/self?token=${token}`, {
+            mode: 'cors'
+        })
+        .then((res) => res.json())
+        .then(checkResult);
 }
 
-export function getList(token, name) {
-    if ( window.location.host !== PRODUCTION_HOST ) {
-        return devGetList(token, name);
-
-    } else {
-        return fetch(`${API_URL}/list/${name}` + (token ? `?token=${token}` : ''), {
-                mode: 'cors'
-            })
-            .then((res) => res.json())
-            .then(checkResult);
-    }
+export function getList(token, name = 'todo') {
+    return fetch(`${API_URL}/list/${name}` + (token ? `?token=${token}` : ''), {
+            mode: 'cors'
+        })
+        .then((res) => res.json())
+        .then(checkResult);
 }
 
-export function createItem(token, list, title, description) {
-    if ( window.location.host !== PRODUCTION_HOST ) {
-        return devCreateItem(token, list, title, description);
-
-    } else {
-        return fetch(`${API_URL}/list/${list}?token=${token}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    title,
-                    description
-                })
+export function createItem(token, list = 'todo', title, description) {
+    return fetch(`${API_URL}/list/${list}?token=${token}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                title,
+                description
             })
-            .then((res) => res.json())
-            .then(checkResult);
-    }
+        })
+        .then((res) => res.json())
+        .then(checkResult);
 }
 
 export function vote(token, itemId, voteName, value) {
-    if ( window.location.host !== PRODUCTION_HOST ) {
-        return devVote(token, itemId, voteName, value);
-
-    } else {
-        return fetch(`${API_URL}/vote/${itemId}/${voteName}?token=${token}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    count: value
-                })
+    return fetch(`${API_URL}/vote/${itemId}/${voteName}?token=${token}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                count: value
             })
-            .then((res) => res.json())
-            .then(checkResult)
-            .then(result => true);
-    }
+        })
+        .then((res) => res.json())
+        .then(checkResult)
+        .then(result => true);
 }
 
 export function configItem(token, itemId, config) {
-    if ( window.location.host !== PRODUCTION_HOST ) {
-        return devConfigItem(token, itemId, config);
-
-    } else {
-        return fetch(`${API_URL}/config/${itemId}?token=${token}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    config: config
-                })
+    return fetch(`${API_URL}/config/${itemId}?token=${token}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                config: config
             })
-            .then((res) => res.json())
-            .then(checkResult).then(result => true);
-    }
+        })
+        .then((res) => res.json())
+        .then(checkResult).then(result => true);
 }

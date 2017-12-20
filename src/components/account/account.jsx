@@ -1,7 +1,6 @@
 import React from 'react';
 import CurrencyIcon from 'Components/currency-icon/currency-icon';
 import Dropdown from 'Components/dropdown/dropdown';
-import { startLogin as StartLogin } from 'Utils/js/api';
 import './account-style';
 
 // Specify BEM block name
@@ -76,7 +75,7 @@ export default class Account extends React.Component {
      */
     _login() {
         let { location = '' } = window;
-        StartLogin(location);
+        this.props.startLogin(location);
     }
 
     /**
