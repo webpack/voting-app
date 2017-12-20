@@ -5,6 +5,6 @@ import Wrapper from 'Components/wrapper/wrapper';
 
 ReactDOM.render((
     <DevContainer>
-        <Wrapper name="todo" />
+        <Wrapper development />
     </DevContainer>
 ), document.getElementById('root'));
