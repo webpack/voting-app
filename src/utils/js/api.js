@@ -15,7 +15,7 @@ export function isLoginActive() {
 export function startLogin(callbackUrl) {
     let state = '' + Math.random();
 
-    if ( callbackUrl.includes('webpack.js.org') ) {
+    if ( callbackUrl.href.includes('webpack.js.org') ) {
         window.localStorage.githubState = state;
         window.location = 'https://github.com/login/oauth/authorize?client_id=' + GITHUB_CLIENT_ID + '&scope=user:email&state=' + state + '&allow_signup=false&redirect_uri=' + encodeURIComponent(callbackUrl);
 
