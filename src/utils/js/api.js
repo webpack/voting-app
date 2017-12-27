@@ -12,12 +12,12 @@ export function isLoginActive() {
     return /^\?code=([^&]*)&state=([^&]*)/.test(window.location.search);
 }
 
-export function startLogin(callbackUrl) {
+export function startLogin(url = '') {
     let state = '' + Math.random();
 
-    if ( callbackUrl.href.includes('webpack.js.org') ) {
+    if ( url.includes('webpack.js.org') ) {
         window.localStorage.githubState = state;
-        window.location = 'https://github.com/login/oauth/authorize?client_id=' + GITHUB_CLIENT_ID + '&scope=user:email&state=' + state + '&allow_signup=false&redirect_uri=' + encodeURIComponent(callbackUrl);
+        window.location = 'https://github.com/login/oauth/authorize?client_id=' + GITHUB_CLIENT_ID + '&scope=user:email&state=' + state + '&allow_signup=false&redirect_uri=' + encodeURIComponent(url);
 
     } else alert(
         'You can\'t login with GitHub OAuth on localhost. Please pass the ' +

@@ -74,8 +74,10 @@ export default class Account extends React.Component {
      * 
      */
     _login() {
-        let { location = '' } = window;
-        this.props.startLogin(location);
+        let { location = {} } = window,
+            { href = '' } = location;
+
+        this.props.startLogin(href);
     }
 
     /**
