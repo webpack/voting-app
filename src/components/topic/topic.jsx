@@ -76,7 +76,7 @@ export default class Topic extends React.Component {
 
                 <section className={ `${block}__vote` }>
                     <div className={ `${block}__title ${block}__title--vote` }>
-                        Place Your Vote
+                        {topic.locked ? 'Voting Ended' : 'Place Your Vote'}
                     </div>
                     <div className={ `${block}__inner` }>
                         { votes.map((currency, i) => (
