@@ -14,6 +14,7 @@ export default class Votes extends React.Component {
                 <span className={ `${block}__currency` }>
                     { !locked && user.currency && (
                         <figure
+                            tabIndex={0}
                             className={ `${block}__up` }
                             onClick={ () => this._vote(1) }
                             onMouseDown={ () => this._startCounter(true) }
@@ -30,6 +31,7 @@ export default class Votes extends React.Component {
 
                     { !locked && user.currency && (
                         <figure
+                            tabIndex={0}
                             className={ `${block}__down` }
                             onClick={ () => this._vote(-1) }
                             onMouseDown={ () => this._startCounter(false) }
