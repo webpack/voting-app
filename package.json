@@ -1,6 +1,6 @@
 {
   "name": "webpack.vote",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "An application for casting votes on new webpack features and fixes.",
   "main": "dist/vote.bundle.js",
   "scripts": {
