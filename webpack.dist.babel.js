@@ -1,4 +1,6 @@
 import Merge from 'webpack-merge'
+import cssnano from 'cssnano'
+import OptimizeCssAssetsPlugin from 'optimize-css-assets-webpack-plugin'
 
 import CommonConfig from './webpack.common.babel.js'
 
@@ -18,5 +20,11 @@ export default env => Merge(CommonConfig(env), {
             commonjs: 'react-dom',
             amd: 'react-dom'
         }
-    }
+    },
+    plugins: [
+        new OptimizeCssAssetsPlugin({
+            assetNameRegExp: /\.min\.css$/g,
+            cssProcessor: cssnano
+        })
+    ]
 })
