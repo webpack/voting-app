@@ -50,7 +50,7 @@ export default class Dropdown extends React.Component {
         );
     }
 
-    componentWillMount() {
+    componentDidMount() {
         if ( document ) {
             document.addEventListener(
                 'click',

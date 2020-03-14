@@ -139,12 +139,6 @@ export default class Wrapper extends React.Component {
         }
     }
 
-    componentWillReceiveProps(props) {
-        if ( !this._supportedBrowser ) return;
-
-        this._updateList(props);
-    }
-
     /**
      * Fetch user information and available influence
      * 
