@@ -14,7 +14,7 @@ export default props => {
             </h2>
             <p className={ `${block}__description` }>
                 <em>Influence</em> is a unit of measure based on time you have been a member on GitHub. However, 
-                from 2017 on you will recieve one influence per day.
+                from 2017 on you will receive one influence per day.
             </p>
         </section>
     ) : (
