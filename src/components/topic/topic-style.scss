@@ -1,5 +1,5 @@
-@import 'mixins';
-@import 'functions';
+@import "mixins";
+@import "functions";
 
 .topic {
     display: flex;
@@ -87,12 +87,23 @@
             width: 100% !important;
             line-height: 1.5;
             resize: none;
+            height: 20px;
+            padding: 5px 2px;
+            background: #e4e4e4;
+            border-radius: 4px;
         }
     }
 
     &__save {
         flex: 0 0 auto;
-        margin-left: 1em;
+        width: 20%;
+        margin: auto;
+        padding: 5px 10px;
+        background: #465e69;
+        font-weight: 400;
+        color: #ffffff;
+        border: 0;
+        border-radius: 4px;
     }
 
     &__sponsors {
@@ -126,7 +137,7 @@
         margin-bottom: 0.5em;
 
         &:first-child:after {
-            content: '+';
+            content: "+";
             margin-left: 12px;
         }
     }
@@ -162,6 +173,10 @@
 
         & [class*="__total"] {
             text-align: left;
+        }
+
+        & [class*="__save"] {
+            width: 90%;
         }
     }
 }
