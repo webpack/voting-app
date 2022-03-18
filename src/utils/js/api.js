@@ -34,7 +34,7 @@ export function continueLogin() {
         return login(match[1], match[2]).then(result => {
             setTimeout(() => {
                 let href = window.location.href;
-                window.location = href.substr(0, href.length - window.location.search.length);
+                window.location = href.slice(0, href.length - window.location.search.length);
             }, 100);
 
             return result;
