@@ -80,7 +80,7 @@ export function startLogin(callbackUrl) {
 export function continueLogin() {
     if ( /^\?login=/.test(window.location.search) ) {
         return delay(2000).then(() => {
-            setTimeout(() => window.location = decodeURIComponent(window.location.search.substr(7), 100));
+            setTimeout(() => window.location = decodeURIComponent(window.location.search.slice(7), 100));
             return 'developer';
         });
     }
